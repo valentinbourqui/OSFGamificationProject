@@ -15,7 +15,6 @@ Songs.Song = Ember.Object.extend({
     listens: 0
 });
 
-
 Songs.songsController = Ember.ArrayController.create({
     content: [],
     init: function(){
