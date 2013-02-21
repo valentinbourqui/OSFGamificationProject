@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Handlebars.JS Article</title>
+		<script type="text/javascript" src="handlebars.js"></script> 
+		<meta http://api.yummly.com/v1/api/recipes?_app_id=5ff369c3&_app_key=dd5bda671aa6ee6b2fe7e46c473578a8&maxResult=3&requirePictures=true&flavor=sweet>
+		<style>
+			body{
+				width: 100%;
+				height: 100%;
+				overflow: auto;
+				background: #FFF6F3;
+				font-family: sans-serif;
+			}
+			#Content{
+				width: 806px;
+				position: absolute;
+				left: 50%;
+				margin-left: -350px;
+				margin-bottom: 20px;
+				padding-bottom: 20px; 
+			}
+			.Box{
+				width: 350px;
+				position: relative;
+				padding: 10px;
+				margin: 0px;
+				margin-right: 8px;
+				float: left;
+				background: #FFF;
+				border: 1px solid #F0F0F0;
+				margin-bottom: 8px;
+			}
+			li{
+				color: #454440;
+				font-size: 14px;
+				line-height: 19px;
+				text-align: justify;
+			}
+			h1{
+				font-size: 50px;
+				margin-bottom: 30px;
+				margin-top: 30px;
+			}
+			.Thumb{
+				width: 350px;
+			}
+			.button{
+				position: absolute;
+				bottom: 10px;
+				right: 10px;
+				border: 1px solid #F0F0F0;
+				padding: 12px;
+				background: #f44b4b;
+				color: #FAFAFA;
+				width: 70px;
+				text-align: center;
+				text-decoration: none;
+				font-weight: bold;
+				font-size: 12px;
+				cursor: pointer;
+			}
+			.button:hover{
+				background: #d43b3b;
+				color: #FFF;
+			}
+			#BOS{
+				font-size: 13px;
+			}
+			#BOS img{
+				vertical-align: middle;
+			}
+			#Logo{
+				font-size: 13px;
+				color : #CE0000;
+				text-decoration: none;
+			}
+			#Logo:hover{
+				text-decoration: underline;
+			}
+			ul{
+				margin: 6px;
+			}
+			p{
+				margin: 0px;
+			}
+			#loading{
+				width:400px;
+				margin: auto;
+				text-align: center;
+				color: #888;
+				margin-top: 250px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="loading"><img src="Loading.gif"><br><h2>Loading</h2></div>
+		<script id="Handlebars-Template" type="text/x-handlebars-template">
+			<div id="Content">
+			  <h1>&Xi;RecipeCards <span id='BOS'>Recipe search powered by <a id='Logo' href='http://www.yummly.com/recipes'><img src='http://static.yummly.com/api-logo.png'/></a></span></h1>
+			  {{#each Recipes}}
+			  	<div class='Box'>
+				  	<img class='Thumb' src="{{{Image}}}" alt="{{Name}}">
+				  	<h3>{{Name}} <a id='Logo' href="{{Source.Url}}"> - {{Source.Name}}</a></h3>
+				  	<h5>{{getFlavor Flavors}}</h5>
+				  	<h5>{{Yield}}</h5>
+				  	<p>Ingredients:</p>
+				  	<ul>
+				  		{{#each Ingredients}}
+				  			<li>{{this}}</li>
+				  		{{/each}}
+				  	</ul>
+			  	</div>
+			  {{/each}}
+			</div>
+		</script>
+		
+		<script type="text/javascript">
+			Handlebars.registerHelper("getFlavor", function(FlavorsArr){
+				var H = 0;
+				var Name = '';
+				for(var F in FlavorsArr)
+				{
+					if(FlavorsArr[F] > H)
+					{
+						H = FlavorsArr[F];
+						Name = F;
+					}
+				}
+				return "This Dish has a " + Name + " Flavor";
+			});
+			var Ajax = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+			Ajax.onreadystatechange = function(){
+				if (Ajax.readyState==4 && Ajax.status==200)
+				{
+					var Recipes = JSON.parse(Ajax.responseText);
+					var Source = document.getElementById("Handlebars-Template").textContent;
+					var Template = Handlebars.compile(Source);
+					var HTML = Template({ Recipes : Recipes });
+					document.body.innerHTML = HTML;
+				}
+			}
+			Ajax.open("GET","Recipe.php", true);
+			Ajax.send();
+		</script>
+	</body>
+</html>
