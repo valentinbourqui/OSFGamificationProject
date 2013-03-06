@@ -1,25 +1,22 @@
 
-	var council;
-var jqxhr = $.getJSON("http://127.0.0.1:8019/test", function() {
-  alert("success");
-})
-.success(function() { alert("second success"); })
-.error(function() { alert("error"); })
-.complete(function() { alert("complete"); });
- 
-// perform other work here ...
- 
-// Set another completion function for the request above
-jqxhr.complete(function(){ alert("second complete"); });	
+var council = "No id";
+
+$.ajax({
+		dataType: "json",
+		url: "http://localhost:3000/test",
+		async : false,
+		type: 'get',			
+		success : function(data) {
+			   council = data;
+	    }
+});	
 
 
 Songs = Ember.Application.create({
     mixmaster: council,
     totalReviews: 0,
     ready: function(){
-    	
-      
-       alert(council);
+		alert(council);
     }
 });
 
