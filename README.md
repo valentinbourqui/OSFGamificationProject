@@ -1,4 +1,4 @@
 OSFGamificationProject
 ======================
 
-The Gamification Project
+The Gamification Project, Master of Science in Engineering (MSE), HES-SO
