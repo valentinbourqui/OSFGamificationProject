@@ -1,6 +1,6 @@
 define(['../../../tools/engine'], function (engine) {
 	
-    // We define a Person with a custom view
+    // We define a Level with a custom view
 	engine.save('_design/level', {
 	      allByAppID: {
 	          map: function (doc) {
