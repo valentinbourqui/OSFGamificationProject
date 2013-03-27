@@ -1,14 +1,13 @@
-define(['../../../tools/engine','./level','../../../tools/validatorContent','../../../tools/sendResponse'],function (engine,level,validator,sendResponse) {
+define(['../../../tools/engine','../../../tools/validatorContent','../../../tools/sendResponse'],function (engine,validator,sendResponse) {
 
 	
 	// Add a level for for a sepcified application
-	addLevel =  function(req, res){
+	createLevel =  function(req, res){
 	    
 	    var JSONContent;
 		req.on('data', function (chunk) {
 		    JSONContent = JSON.parse(chunk);     
-            console.log();
-		    // Check the login 
+		    // Check the security
 		    
 		    // TODO 
 		    
@@ -47,7 +46,7 @@ define(['../../../tools/engine','./level','../../../tools/validatorContent','../
 
 	// Select all levels for a sepcified application
 	selectAllLevels = function(req, res){	
-		 // Check the login 
+		 // Check the security
 		    
 		 // TODO 
 		 
@@ -75,8 +74,8 @@ define(['../../../tools/engine','./level','../../../tools/validatorContent','../
 	};
 	
 	// Select a level for a sepcified application
-	selectLevel = function(req, res, next){
-		 // Check the login 
+	selectLevel = function(req, res){
+		 // Check the security
 		    
 		 // TODO 
 		 
@@ -106,7 +105,7 @@ define(['../../../tools/engine','./level','../../../tools/validatorContent','../
 	
 	// delete a level for an 
 	deleteLevel = function(req, res){
-		 // Check the login 
+		// Check the security
 		    
 		 // TODO 
 		 
@@ -146,7 +145,7 @@ define(['../../../tools/engine','./level','../../../tools/validatorContent','../
 		}
 	};
 		
-
+	// update a level
 	updateLevel = function(req, res){    
 	    var JSONContent;
 		req.on('data', function (chunk) {
@@ -201,7 +200,7 @@ define(['../../../tools/engine','./level','../../../tools/validatorContent','../
 	
 	
     return {
-    	addLevel: addLevel,
+    	createLevel: createLevel,
         selectLevel: selectLevel,
         updateLevel: updateLevel,
         deleteLevel: deleteLevel,
