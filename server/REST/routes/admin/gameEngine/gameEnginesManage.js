@@ -22,7 +22,7 @@ define(['../../../tools/engine','../../../tools/validatorContent','../../../tool
 		    // TODO 
 
 			if(errors[0] == null){
-				engine.save({"type": 'gameEngine' ,"content" : [JSONContent]}, function (err, response) {
+				engine.insert({"type": 'gameEngine' ,"content" : [JSONContent]}, function (err, response) {
 					      if(err){
 					      	sendResponse.sendErrorsDBError(res,err);
 					      }
@@ -46,126 +46,18 @@ define(['../../../tools/engine','../../../tools/validatorContent','../../../tool
 	
 	// Select a game engine
 	selectGameEngine = function(req, res){
-		 // Check the security
-		    
-		 // TODO 
-		 
-		// Check admin ID 
-		validator.check(req.params.appid, "Appid invalid integer").isInt();
-		validator.check(req.params.appid).valideAppID();
-			
-		// Check if error are found and flush errors
-		var errors = validator.getErrors(); 
-		validator.flushErrors();		
-		if(errors[0] == null){
-			engine.view('level/allByGameEngineID',  { key: req.params.appid }, function (err, response) {
-			 	if(err){
-				  	sendResponse.sendErrorsDBError(res,err);
-				}
-				else{
-					var JSONContent = JSON.stringify(response);
-					sendResponse.sendObject(res,JSONContent);					      	
-				}
-			  });
-		} 
-		else{	
-			sendResponse.sendErrorsBadContent(res,errors);
-		}
+		
 	};
 	
 	// delete a game engine
 	deleteGameEngine = function(req, res){
 		 // Check the security 
-		    
-		 // TODO 
-		 
-		// Check admin ID 
-		validator.check(req.params.appid, "Appid invalid integer").isInt();
-		validator.check(req.params.appid).valideAppID();
-			
-		// Check if error are found and flush errors
-		var errors = validator.getErrors(); 
-		validator.flushErrors();		
-		if(errors[0] == null){
-			engine.view('level/allByLevelID',  { key: req.params.id }, function (err, response) {
-			
-			 	if(err){
-				  	sendResponse.sendErrorsDBError(res,err);
-				}
-				else if(response[0] == null){
-				  	sendResponse.sendWariningDelete(res,"Object Not found");
-				}
-				else{		   
-					response.forEach(function (key, row, id) {
-				         engine.remove(id,row._rev, function (err, responseTwo) {
-						 	if(err){
-							  	sendResponse.sendErrorsDBError(res,err);
-							}
-							else{
-								var JSONContent = JSON.stringify(responseTwo);
-								sendResponse.sendObject(res,JSONContent);					      	
-							}
-						  });
-				    });				      	
-				}
-			  });	
-		} 
-		else{	
-			sendResponse.sendErrorsBadContent(res,errors);
-		}
+	
 	};
 		
 	// Update a game engine
 	updateGameEngine = function(req, res){    
-	    var JSONContent;
-		req.on('data', function (chunk) {
-		    JSONContent = JSON.parse(chunk);     
-            console.log();
-		    // Check the security
-		    
-		    // TODO 
-		    
-		    //validate data
-			validator.check(JSONContent.points, "Points is empty").notNull();
-			validator.check(JSONContent.points, "Points invalid integer").isInt();
-			validator.check(JSONContent.name,"Name is empty").notNull();
-			validator.check(JSONContent.description,"Description is empty").notNull();
-			
-			// Check admin ID 
-			validator.check(req.params.appid, "Appid invalid integer").isInt();
-			validator.check(req.params.appid).valideAppID();
-			
-			// Check if error are found and flush errors
-			var errors = validator.getErrors(); 
-			validator.flushErrors();
-
-			if(errors[0] == null){
-				engine.view('level/allByLevelID',  { key: req.params.id }, function (err, response) {
-			
-				 	if(err){
-					  	sendResponse.sendErrorsDBError(res,err);
-					}
-					else if(response[0] == null){
-					  	sendResponse.sendWariningDelete(res,"Object Not found");
-					}
-					else{		   	
-						engine.save(req.params.id, {"appID": req.params.appid, "type": 'level' ,"content" : [JSONContent]}, function (err, response) {
-							      if(err){
-							      	sendResponse.sendErrorsDBError(res,err);
-							      }
-							      else{
-									var JSONContent = JSON.stringify({"response": response});
-									sendResponse.sendObject(res,JSONContent);					      	
-							      }
-						});
-					}
-				});
-			}
-			else{
-				
-				sendResponse.sendErrorsBadContent(res,errors);
-			}
-		});
+	
 	};
 	
 	

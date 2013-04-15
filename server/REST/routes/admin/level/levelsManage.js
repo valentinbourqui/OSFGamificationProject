@@ -26,16 +26,15 @@ define(['../../../tools/engine','../../../tools/validatorContent','../../../tool
 			validator.flushErrors();
 
 			if(errors[0] == null){
-				engine.save({"appID": req.params.appid, "type": 'level' ,"content" : [JSONContent]}, function (err, response) {
+				engine.insert({"appID": req.params.appid, "type": 'level' ,"content" : [JSONContent]},function (err, body) {
 					      if(err){
 					      	sendResponse.sendErrorsDBError(res,err);
 					      }
 					      else{
-							var JSONContent = JSON.stringify({"response": response});
+							var JSONContent = JSON.stringify({"response": body});
 							sendResponse.sendObjectCreated(res,JSONContent);					      	
 					      }
 				});
-
 			}
 			else{
 				
@@ -58,12 +57,12 @@ define(['../../../tools/engine','../../../tools/validatorContent','../../../tool
 		var errors = validator.getErrors(); 
 		validator.flushErrors();		
 		if(errors[0] == null){
-			engine.view('level/allByAppID',  { key: req.params.appid }, function (err, response) {
+			engine.view('levels',"allByAppID",  { key: req.params.appid }, function (err, body) {
 			 	if(err){
 				  	sendResponse.sendErrorsDBError(res,err);
 				}
 				else{
-					var JSONContent = JSON.stringify(response);
+					var JSONContent = JSON.stringify(body);
 					sendResponse.sendObject(res,JSONContent);					      	
 				}
 			  });
@@ -87,13 +86,13 @@ define(['../../../tools/engine','../../../tools/validatorContent','../../../tool
 		var errors = validator.getErrors(); 
 		validator.flushErrors();		
 		if(errors[0] == null){
-			engine.view('level/allByLevelID',  { key: req.params.id }, function (err, response) {
+			engine.show('levels','allByLevelID', req.params.id , function (err, doc){
 			 	if(err){
 				  	sendResponse.sendErrorsDBError(res,err);
 				}
 				else{
 					 
-					var JSONContent = JSON.stringify(response);
+					var JSONContent = JSON.stringify(doc);
 					sendResponse.sendObject(res,JSONContent);					      	
 				}
 			  });
@@ -117,17 +116,15 @@ define(['../../../tools/engine','../../../tools/validatorContent','../../../tool
 		var errors = validator.getErrors(); 
 		validator.flushErrors();		
 		if(errors[0] == null){
-			engine.view('level/allByLevelID',  { key: req.params.id }, function (err, response) {
-			
+			engine.show('levels','allByLevelID', req.params.id ,  function (err, body) {
 			 	if(err){
 				  	sendResponse.sendErrorsDBError(res,err);
 				}
-				else if(response[0] == null){
+			    else if(body.level == null){
 				  	sendResponse.sendWariningDelete(res,"Object Not found");
 				}
 				else{		   
-					response.forEach(function (key, row, id) {
-				         engine.remove(id,row._rev, function (err, responseTwo) {
+				         engine.destroy(body.level._id,body.level._rev, function (err, responseTwo) {
 						 	if(err){
 							  	sendResponse.sendErrorsDBError(res,err);
 							}
@@ -135,8 +132,7 @@ define(['../../../tools/engine','../../../tools/validatorContent','../../../tool
 								var JSONContent = JSON.stringify(responseTwo);
 								sendResponse.sendObject(res,JSONContent);					      	
 							}
-						  });
-				    });				      	
+						  });			      	
 				}
 			  });	
 		} 
@@ -170,24 +166,13 @@ define(['../../../tools/engine','../../../tools/validatorContent','../../../tool
 			validator.flushErrors();
 
 			if(errors[0] == null){
-				engine.view('level/allByLevelID',  { key: req.params.id }, function (err, response) {
-			
-				 	if(err){
-					  	sendResponse.sendErrorsDBError(res,err);
-					}
-					else if(response[0] == null){
-					  	sendResponse.sendWariningDelete(res,"Object Not found");
-					}
-					else{		   	
-						engine.save(req.params.id, {"appID": req.params.appid, "type": 'level' ,"content" : [JSONContent]}, function (err, response) {
-							      if(err){
-							      	sendResponse.sendErrorsDBError(res,err);
-							      }
-							      else{
-									var JSONContent = JSON.stringify({"response": response});
-									sendResponse.sendObject(res,JSONContent);					      	
-							      }
-						});
+				engine.atomic("levels", "inplace", req.params.id, JSONContent, function (err, response) {
+				    if(err){
+							sendResponse.sendErrorsDBError(res,err);
+				    }
+					else{
+							var JSONContent = JSON.stringify({"response": response});
+							sendResponse.sendObject(res,JSONContent);					      	
 					}
 				});
 			}

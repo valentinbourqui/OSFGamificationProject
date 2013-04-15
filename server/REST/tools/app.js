@@ -39,6 +39,9 @@ define(['express','../variables/expressVariables'], function (express,expressVar
 	    app.use(logErrors);
 		app.use(clientErrorHandler);
 		app.use(errorHandler);
+		app.use(express.session({
+			secret: "skjghskdjsddfpsllwwbqigohqdiouk"
+		}));
 	});
 	
 

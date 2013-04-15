@@ -18,26 +18,19 @@ define(['./engine','validator'],function (engine,check) {
 	
  	// Create your own validators 
  	Validator.prototype.valideAppID = function() {
-	 	if(this.asyncvalideAppID(this.str) == true){
-	 		this.error('AppID invalide not found' );
-	 	}
- 	
-	}
-	
-    Validator.prototype.asyncvalideAppID = function(str) {
+	 	engine.view('gamEngine', 'allByGameEngineID',  { key: this.str }, function (err, response) {
+	 		 			  console.log('database created.');
 
- 	engine.view('gamEngine/allByGameEngineID',  { key: str }, function (err, response) {
-			 	if(err || response[0] == null){
-			 		    	console.log(response[0]);
-				  	return true;
-				}
-				else{
-						console.log(response[0]);
-					return false;
-				}
-		});
+				 	if(err || response[0] == null){
+					    return false;
+					}
+					else{
+						return true;
+					}
+			});
+				 
 	}
-	
+
 	
  	// TODO
 	
