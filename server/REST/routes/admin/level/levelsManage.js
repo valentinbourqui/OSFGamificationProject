@@ -64,7 +64,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 				validator.flushErrors();
 				
 				if (true){//errors[0] == null) {
-					engine.view('levels', "allLevelsByAppID", {
+					engine.view('levels', "allByAppID", {
 						key : req.params.appid
 					}, function(err, body) {
 						if (err) {
