@@ -3,6 +3,15 @@ define(['../../../tools/engine'], function (engine) {
     // We define a game engine with a custom view
      engine.insert(
 		  { "views": 
+		    { "allObjcetsByAppID": 
+		    	{  
+					map: function (doc,req) {
+					   var body = JSON.parse(req.body);
+					   if (body.key == doc.appID) emit(doc.appID, doc);
+					}
+				}
+			}
+		  , "shows": 
 		    { "allByGameEngineID": function(doc, req) 
 				{
        				return { body: JSON.stringify({ gameEngine : doc }) };
@@ -19,5 +28,4 @@ define(['../../../tools/engine'], function (engine) {
 			}
 		}, '_design/gameEngines'
 	);
- 	  
 });

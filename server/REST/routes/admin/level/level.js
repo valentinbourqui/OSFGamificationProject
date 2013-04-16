@@ -2,10 +2,11 @@ define(['../../../tools/engine'], function (engine) {
 	 // We define a Level with a custom view
  	engine.insert(
 		{ "views": 
-		    { "allByAppID": 
+		    { "allLevelsByAppID": 
 		    	{  
-					map: function (doc) {
-					   if (doc.type =="level") emit(doc.appID, doc);
+					map: function (doc,req) {
+					   var body = JSON.parse(req.body);
+					   if (doc.type =="level" && body.key == doc.appID) emit(doc.appID, doc);
 					}
 				}
 			}
@@ -28,17 +29,4 @@ define(['../../../tools/engine'], function (engine) {
 			}
 		}, '_design/levels'
 	);
-
-/*	engine.save('_design/level', {
-	      "allByAppID": {  
-	          map: function (doc) {
-	              if (doc.type =="level") emit(doc.appID, doc);
-	          }
-	      },
-	      allByLevelID: {
-	          map: function (doc) {
-	              if (doc.type =="level") emit(doc._id, doc);
-	          }
-	      }
-  	});*/
 });
