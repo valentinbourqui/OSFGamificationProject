@@ -15,21 +15,6 @@ define(['./engine','validator'],function (engine,check) {
 	Validator.prototype.flushErrors = function () {
    		 this._errors = null;
 	}
-	
- 	// Create your own validators 
- 	Validator.prototype.valideAppID = function() {
-	 	engine.view('gamEngine', 'allByGameEngineID',  { key: this.str }, function (err, response) {
-	 		 			  console.log('database created.');
-
-				 	if(err || response[0] == null){
-					    return false;
-					}
-					else{
-						return true;
-					}
-			});
-				 
-	}
 
 	
  	// TODO
