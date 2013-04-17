@@ -27,7 +27,9 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 						engine.insert({
 							"appID" : req.params.appid,
 							"type" : 'level',
-							"content" : [JSONContent]
+							"name" : JSONContent.name,
+							"description" : JSONContent.description,
+							"points" : JSONContent.points,
 						}, function(err, body) {
 							if (err) {
 								sendResponse.sendErrorsDBError(res, err);
@@ -62,8 +64,8 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 				// Check if error are found and flush errors
 				var errors = validator.getErrors();
 				validator.flushErrors();
-				
-				if (true){//errors[0] == null) {
+
+				if (true) {//errors[0] == null) {
 					engine.view('levels', "allByAppID", {
 						key : req.params.appid
 					}, function(err, body) {
@@ -97,8 +99,8 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 				// Check if error are found and flush errors
 				var errors = validator.getErrors();
 				validator.flushErrors();
-				
-				if (true){//errors[0] == null) {
+
+				if (true) {//errors[0] == null) {
 					engine.show('levels', 'allByLevelID', req.params.id, function(err, doc) {
 						if (err) {
 							sendResponse.sendErrorsDBError(res, err);
@@ -112,7 +114,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 					sendResponse.sendErrorsBadContent(res, errors);
 				}
 			} else {
-				sendResponse.sendErrorsBadContent(res, "Error : Bad appID "+err);
+				sendResponse.sendErrorsBadContent(res, "Error : Bad appID " + err);
 			}
 		});
 	};
@@ -123,7 +125,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		engine.view('gameEngines', 'allByGameEngineID', {
 			key : req.params.appid
 		}, function(err, response) {
-			if (!err ) {
+			if (!err) {
 				// Check the security
 
 				// TODO
@@ -131,7 +133,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 				// Check if error are found and flush errors
 				var errors = validator.getErrors();
 				validator.flushErrors();
-				if (true){//errors[0] == null) {
+				if (true) {//errors[0] == null) {
 					engine.show('levels', 'allByLevelID', req.params.id, function(err, body) {
 						if (err) {
 							sendResponse.sendErrorsDBError(res, err);
@@ -163,7 +165,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		engine.view('gameEngines', 'allByGameEngineID', {
 			key : req.params.appid
 		}, function(err, response) {
-			if (!err ) {
+			if (!err) {
 				req.on('data', function(chunk) {
 					var JSONContent = JSON.parse(chunk);
 					console.log();

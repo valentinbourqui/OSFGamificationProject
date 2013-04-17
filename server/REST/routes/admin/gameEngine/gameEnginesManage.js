@@ -21,7 +21,8 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 			if (errors[0] == null) {
 				engine.insert({
 					"type" : 'gameEngine',
-					"content" : [JSONContent]
+					"name" : JSONContent.name,
+					"description": JSONContent.description, 
 				}, function(err, response) {
 					if (err) {
 						sendResponse.sendErrorsDBError(res, err);
@@ -69,6 +70,19 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 					if (err) {
 						sendResponse.sendErrorsDBError(res, err);
 					} else {
+						engine.view('gamEngine', "allObjcetsByAppID", {
+							key : req.params.appid
+						}, function(err, body) {
+							if (err) {
+								sendResponse.sendErrorsDBError(res, err);
+							} else {
+								for (var i in body.row) {
+									engine.destroy(body.row[i]._id, body.row[i]._rev);
+								}
+								var JSONContent = JSON.stringify(body);
+								sendResponse.sendObject(res, JSONContent);
+							}
+						});
 						var JSONContent = JSON.stringify(responseTwo);
 						sendResponse.sendObject(res, JSONContent);
 					}

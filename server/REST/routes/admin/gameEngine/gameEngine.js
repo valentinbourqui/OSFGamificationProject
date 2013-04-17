@@ -21,8 +21,8 @@ define(['../../../tools/engine'], function (engine) {
 			{ "inplace": function(doc, req) 
 				{
        				 var body = JSON.parse(req.body);
-          			 doc.content[0].name = body.name;
-          			 doc.content[0].description = body.description;
+          			 doc.name = body.name;
+          			 doc.description = body.description;
           			 return [doc, JSON.stringify(doc)];
 				}
 			}
