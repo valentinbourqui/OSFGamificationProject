@@ -3,12 +3,13 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 	// Add a level for for a sepcified application
 	createLevel = function(req, res) {
 		// Check admin ID
-		engine.view('gameEngines', 'allByGameEngineID', {
-			key : req.params.appid
-		}, function(err, response) {
-			if (!err) {
-				req.on('data', function(chunk) {
-					var JSONContent = JSON.parse(chunk);
+		req.on('data', function(chunk) {
+			var JSONContent = JSON.parse(chunk);
+			engine.show('gameEngines', 'allByGameEngineID', {
+				key : req.params.appid
+			}, function(err, response) {
+				if (!err) {
+
 					// Check the security
 
 					// TODO
@@ -43,17 +44,18 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 					} else {
 						sendResponse.sendErrorsBadContent(res, errors);
 					}
-				});
-			} else {
-				sendResponse.sendErrorsBadContent(res, "Error : Bad appID");
-			}
+				} else {
+					sendResponse.sendErrorsBadContent(res, "Error : Bad appID");
+				}
+			});
 		});
+
 	};
 
 	// Select all levels for a sepcified application
 	selectAllLevels = function(req, res) {
 		// Check admin ID
-		engine.view('gameEngines', 'allByGameEngineID', {
+		engine.show('gameEngines', 'allByGameEngineID', {
 			key : req.params.appid
 		}, function(err, response) {
 			if (!err) {
@@ -88,7 +90,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 	// Select a level for a sepcified application
 	selectLevel = function(req, res) {
 		// Check admin ID
-		engine.view('gameEngines', 'allByGameEngineID', {
+		engine.show('gameEngines', 'allByGameEngineID', {
 			key : req.params.appid
 		}, function(err, response) {
 			if (!err) {
@@ -122,7 +124,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 	// delete a level for an
 	deleteLevel = function(req, res) {
 		// Check admin ID
-		engine.view('gameEngines', 'allByGameEngineID', {
+		engine.show('gameEngines', 'allByGameEngineID', {
 			key : req.params.appid
 		}, function(err, response) {
 			if (!err) {
@@ -162,7 +164,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 	// update a level
 	updateLevel = function(req, res) {
 		// Check admin ID
-		engine.view('gameEngines', 'allByGameEngineID', {
+		engine.show('gameEngines', 'allByGameEngineID', {
 			key : req.params.appid
 		}, function(err, response) {
 			if (!err) {
