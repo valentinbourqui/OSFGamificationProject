@@ -2,6 +2,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 
 	// Create a new game engine
 	createGameEngine = function(req, res) {
+		 
 		req.on('data', function(chunk) {
 			var JSONContent = JSON.parse(chunk);
 
@@ -22,7 +23,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 				engine.insert({
 					"type" : 'gameEngine',
 					"name" : JSONContent.name,
-					"description": JSONContent.description, 
+					"description" : JSONContent.description,
 				}, function(err, response) {
 					if (err) {
 						sendResponse.sendErrorsDBError(res, err);
@@ -46,7 +47,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 	// Select a game engine
 	selectGameEngine = function(req, res) {
 
-		engine.show('gamEngine', 'allByGameEngineID', req.params.appid, function(err, doc) {
+		engine.show('gameEngines', 'allByGameEngineID', req.params.appid, function(err, doc) {
 			if (err) {
 				sendResponse.sendErrorsDBError(res, err);
 			} else {
@@ -60,7 +61,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 
 	// delete a game engine
 	deleteGameEngine = function(req, res) {
-		engine.show('gamEngine', 'allByGameEngineID', req.params.appid, function(err, body) {
+		engine.show('gameEngines', 'allByGameEngineID', req.params.appid, function(err, body) {
 			if (err) {
 				sendResponse.sendErrorsDBError(res, err);
 			} else if (body.gameEngine == null) {
@@ -109,7 +110,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 			validator.flushErrors();
 
 			if (errors[0] == null) {
-				engine.atomic("gamEngine", "inplace", req.params.appid, JSONContent, function(err, response) {
+				engine.atomic("gameEngines", "inplace", req.params.appid, JSONContent, function(err, response) {
 					if (err) {
 						sendResponse.sendErrorsDBError(res, err);
 					} else {
