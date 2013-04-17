@@ -12,7 +12,7 @@ requirejs.config({
 
 // ############################################# RUN  #############################################
 
-requirejs(['loadRequests','http','https'] ,function(app,http,https) {
+requirejs(['loadRequests','http','https'] ,function(app,http,https){
 	
 	
 

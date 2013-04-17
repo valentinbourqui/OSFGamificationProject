@@ -1,20 +1,40 @@
 var engine ;
  
-define(['cradle','../variables/cradleVariables'], function (cradle,cradleVariables) {
+define(['../variables/cradleVariables'], function (cradleVariables) {
 	
-    if(engine == null){
-    	cradle.setup({
+	
+    if(nano == null){
+    	var nano = require('nano')("http://"+cradleVariables.host+":"+cradleVariables.port)
+    	, username = cradleVariables.user
+		, userpass = cradleVariables.password 
+		, callback = console.log // this would normally be some callback
+		, cookies  = {} // store cookies, normally redis or something
+		;
+				
+		nano.db.create('osf_database', function(err, body) {
+			  if (!err) {
+  				  console.log('database created.');
+			      require('./routes/admin/gameEngine/gameEngine');
+			      console.log('Views game engine created.');
+			      require('./routes/admin/level/level');
+			      console.log('Views levels created.');
+			 }
+
+		});
+		engine = nano.use('osf_database');
+    /*	cradle.setup({
 		    host: cradleVariables.host,
 		    port: cradleVariables.port,
 		    cache: true,
 		    raw: false,
 		    auth: { username: cradleVariables.user, password: cradleVariables.password }
-		});
+		});*/
 		
-		var c = new(cradle.Connection);
-		engine = c.database(cradleVariables.database);
+		//var c = new(cradle.Connection);
+		//engine = c.database(cradleVariables.database);
 		
 		// check if the database existe.
+	/*	nano.db.
 		engine.exists(function (err, exists) {
 		    if (err) {
 		      console.log('error', err);
@@ -30,9 +50,9 @@ define(['cradle','../variables/cradleVariables'], function (cradle,cradleVariabl
 		      console.log('Views levels created.');
 		    }
 	  	});
+	}*/
+	
 	}
-	
-	
     return engine;
 
 });
