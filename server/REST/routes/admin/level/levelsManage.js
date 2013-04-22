@@ -8,6 +8,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		engine.show('gameEngines', 'allByGameEngineID', {
 			key : req.params.appid
 		}, function(err, response) {
+			 
 			if (!err) {
 
 				// Check the security
@@ -56,6 +57,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		engine.show('gameEngines', 'allByGameEngineID', {
 			key : req.params.appid
 		}, function(err, response) {
+			
 			if (!err) {
 				// Check the security
 
@@ -88,9 +90,10 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 	// Select a level for a sepcified application
 	selectLevel = function(req, res) {
 		// Check admin ID
-		engine.show('gameEngines', 'allByGameEngineID', {
-			key : req.params.appid
-		}, function(err, response) {
+		engine.show('gameEngines', 'allByGameEngineID', 
+			 req.params.appid
+		, function(err, response) {
+			console.log("Hello"+response.gameEngine+err); 
 			if (!err) {
 				// Check the security
 
