@@ -32,16 +32,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 						if (err) {
 							sendResponse.sendErrorsDBError(res, err);
 						} else {
-							JSONContent = doc.gameEngine;
-							resObject = {
-								"id" : JSONContent._id,
-								"name" : JSONContent.name,
-								"description" : JSONContent.description,
-								"APIKey" : JSONContent.APIKey,
-								"secureKey" : JSONContent.secureKey
-							};
-							resObject = JSON.stringify(resObject);
-							sendResponse.sendObjectCreated(res, resObject);
+							sendResponse.sendObjectCreated(res, gameEngineResponse(doc.gameEngine));
 						}
 					});
 				}
@@ -49,7 +40,6 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		} else {
 			sendResponse.sendErrorsBadContent(res, errors);
 		}
-
 	};
 
 	// Select a game engine
@@ -58,20 +48,11 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 			if (err) {
 				sendResponse.sendErrorsDBError(res, err);
 			} else {
-				JSONContent = doc.gameEngine;
-				if(JSONContent==null){
+				if (doc.gameEngine == null) {
 					sendResponse.sendErrorsNotFound(res, "GameEngine not found");
 					return;
-				}	
-				resObject = {
-					"id" : JSONContent._id,
-					"name" : JSONContent.name,
-					"description" : JSONContent.description,
-					"APIKey" : JSONContent.APIKey,
-					"secureKey" : JSONContent.secureKey
-				};
-				resObject = JSON.stringify(resObject);
-				sendResponse.sendObject(res, resObject);
+				}
+				sendResponse.sendObject(res, gameEngineResponse(doc.gameEngine));
 			}
 		});
 
@@ -89,7 +70,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 					if (err) {
 						sendResponse.sendErrorsDBError(res, err);
 					} else {
-						engine.view('gamEngine', "allObjcetsByAppID", {
+						engine.view('gameEngines', "allObjcetsByAppID", {
 							key : req.params.appid
 						}, function(err, body) {
 							if (err) {
@@ -128,14 +109,11 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		validator.flushErrors();
 
 		if (errors[0] == null) {
-			engine.atomic("gameEngines", "inplace", req.params.appid, JSONContent, function(err, response) {
+			engine.atomic("gameEngines", "inplace", req.params.appid, JSONContent, function(err, doc) {
 				if (err) {
 					sendResponse.sendErrorsDBError(res, err);
 				} else {
-					var JSONContent = JSON.stringify({
-						"response" : response
-					});
-					sendResponse.sendObject(res, JSONContent);
+					sendResponse.sendObject(res, gameEngineResponse(doc));
 				}
 			});
 		} else {
@@ -143,11 +121,41 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		}
 	};
 
+	//Utils
+	checkExistGameEngine = function(req, res, func) {
+		engine.show('gameEngines', 'allByGameEngineID', req.params.appid, function(err, response) {
+			if (!err) {
+				//TODO: Check the security
+				JSONContentEngine = response.gameEngine;
+				if (JSONContentEngine == null) {
+					sendResponse.sendErrorsNotFound(res, "GameEngine not found");
+					return;
+				}
+				func();
+			} else {
+				sendResponse.sendErrorsBadContent(res, "Error : Bad Content");
+			}
+		});
+	};
+
+	// Private
+	gameEngineResponse = function(doc) {
+		resObject = {
+			"id" : doc._id,
+			"name" : doc.name,
+			"description" : doc.description,
+			"APIKey" : doc.APIKey,
+			"secureKey" : doc.secureKey
+		};
+		return JSON.stringify(resObject);
+	}
+
 	return {
 		createGameEngine : createGameEngine,
 		selectGameEngine : selectGameEngine,
 		deleteGameEngine : deleteGameEngine,
-		updateGameEngine : updateGameEngine
+		updateGameEngine : updateGameEngine,
+		checkExistGameEngine : checkExistGameEngine
 	}
 
 });
