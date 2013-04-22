@@ -1,164 +1,93 @@
-define(['../../../tools/engine', '../../../tools/validatorContent', '../../../tools/sendResponse'], function(engine, validator, sendResponse) {
+define(['../../../tools/engine', '../../../tools/validatorContent', '../../../tools/sendResponse', '../gameEngine/gameEnginesManage'], function(engine, validator, sendResponse, gameEngine) {
 
 	// Add a level for for a sepcified application
 	// spécifier dans le HEADER de la requête : Content-Type : application/json
 	createLevel = function(req, res) {
 		// Check admin ID
-		var JSONContent = req.body;
-		engine.show('gameEngines', 'allByGameEngineID', {
-			key : req.params.appid
-		}, function(err, response) {
-			 
-			if (!err) {
+		var JSONContentLevel = req.body;
 
-				// Check the security
+		//validate data
+		validator.check(JSONContentLevel.points, "Points is empty").notNull();
+		validator.check(JSONContentLevel.points, "Points invalid integer").isInt();
+		validator.check(JSONContentLevel.name, "Name is empty").notNull();
+		validator.check(JSONContentLevel.description, "Description is empty").notNull();
 
-				// TODO
+		// Check if error are found and flush errors
+		var errors = validator.getErrors();
+		validator.flushErrors();
 
-				//validate data
-				validator.check(JSONContent.points, "Points is empty").notNull();
-				validator.check(JSONContent.points, "Points invalid integer").isInt();
-				validator.check(JSONContent.name, "Name is empty").notNull();
-				validator.check(JSONContent.description, "Description is empty").notNull();
-
-				// Check if error are found and flush errors
-				var errors = validator.getErrors();
-				validator.flushErrors();
-
-				if (errors[0] == null) {
-					engine.insert({
-						"appID" : req.params.appid,
-						"type" : 'level',
-						"name" : JSONContent.name,
-						"description" : JSONContent.description,
-						"points" : JSONContent.points,
-					}, function(err, body) {
-						if (err) {
-							sendResponse.sendErrorsDBError(res, err);
-						} else {
-							var JSONContent = JSON.stringify({
-								"response" : body
-							});
-							sendResponse.sendObjectCreated(res, JSONContent);
-						}
-					});
-				} else {
-					sendResponse.sendErrorsBadContent(res, errors);
-				}
-			} else {
-				sendResponse.sendErrorsBadContent(res, "Error : Bad appID");
-			}
-		});
+		if (errors[0] == null) {
+			gameEngine.checkExistGameEngine(req, res, function() {
+				engine.insert({
+					"appID" : req.params.appid,
+					"type" : 'level',
+					"name" : JSONContentLevel.name,
+					"description" : JSONContentLevel.description,
+					"points" : JSONContentLevel.points
+				}, function(err, resp) {
+					if (err) {
+						sendResponse.sendErrorsDBError(res, err);
+					} else {
+						engine.show('levels', 'allByLevelID', resp.id, function(err, doc) {
+							sendResponse.sendObjectCreated(res, levelResponse(doc.level));
+						});
+					}
+				});
+			});
+		} else {
+			sendResponse.sendErrorsBadContent(res, errors);
+		}
 	};
 
 	// Select all levels for a sepcified application
 	selectAllLevels = function(req, res) {
-		// Check admin ID
-		engine.show('gameEngines', 'allByGameEngineID', {
-			key : req.params.appid
-		}, function(err, response) {
-			
-			if (!err) {
-				// Check the security
-
-				// TODO
-
-				// Check if error are found and flush errors
-				var errors = validator.getErrors();
-				validator.flushErrors();
-
-				if (true) {//errors[0] == null) {
-					engine.view('levels', "allByAppID", {
-						key : req.params.appid
-					}, function(err, body) {
-						if (err) {
-							sendResponse.sendErrorsDBError(res, err);
-						} else {
-							var JSONContent = JSON.stringify(body);
-							sendResponse.sendObject(res, JSONContent);
-						}
-					});
+		gameEngine.checkExistGameEngine(req, res, function() {
+			engine.view('levels', "allByAppID", {
+				key : req.params.appid
+			}, function(err, body) {
+				if (err) {
+					sendResponse.sendErrorsDBError(res, err);
 				} else {
-					sendResponse.sendErrorsBadContent(res, errors);
+					var JSONContent = JSON.stringify(body);
+					sendResponse.sendObject(res, JSONContent);
 				}
-			} else {
-				sendResponse.sendErrorsBadContent(res, "Error : Bad appID");
-			}
+			});
 		});
 	};
 
 	// Select a level for a sepcified application
 	selectLevel = function(req, res) {
-		// Check admin ID
-		engine.show('gameEngines', 'allByGameEngineID', 
-			 req.params.appid
-		, function(err, response) {
-			console.log("Hello"+response.gameEngine+err); 
-			if (!err) {
-				// Check the security
-
-				// TODO
-
-				// Check if error are found and flush errors
-				var errors = validator.getErrors();
-				validator.flushErrors();
-
-				if (true) {//errors[0] == null) {
-					engine.show('levels', 'allByLevelID', req.params.id, function(err, doc) {
-						if (err) {
-							sendResponse.sendErrorsDBError(res, err);
-						} else {
-
-							var JSONContent = JSON.stringify(doc);
-							sendResponse.sendObject(res, JSONContent);
-						}
-					});
-				} else {
-					sendResponse.sendErrorsBadContent(res, errors);
+		gameEngine.checkExistGameEngine(req, res, function() {
+			engine.show('levels', 'allByLevelID', req.params.id, function(err, doc) {
+				if (doc.level == null) {
+					sendResponse.sendErrorsNotFound(res, "Level not found");
+					return;
 				}
-			} else {
-				sendResponse.sendErrorsBadContent(res, "Error : Bad appID " + err);
-			}
+				sendResponse.sendObject(res, levelResponse(doc.level));
+			});
 		});
 	};
 
 	// delete a level for an
 	deleteLevel = function(req, res) {
 		// Check admin ID
-		engine.show('gameEngines', 'allByGameEngineID', {
-			key : req.params.appid
-		}, function(err, response) {
-			if (!err) {
-				// Check the security
-
-				// TODO
-
-				// Check if error are found and flush errors
-				var errors = validator.getErrors();
-				validator.flushErrors();
-				if (true) {//errors[0] == null) {
-					engine.show('levels', 'allByLevelID', req.params.id, function(err, body) {
+		gameEngine.checkExistGameEngine(req, res, function() {
+			engine.show('levels', 'allByLevelID', req.params.id, function(err, body) {
+				if (err) {
+					sendResponse.sendErrorsDBError(res, err);
+				} else if (body.level == null) {
+					sendResponse.sendWariningDelete(res, "Object Not found");
+				} else {
+					engine.destroy(body.level._id, body.level._rev, function(err, responseTwo) {
 						if (err) {
 							sendResponse.sendErrorsDBError(res, err);
-						} else if (body.level == null) {
-							sendResponse.sendWariningDelete(res, "Object Not found");
 						} else {
-							engine.destroy(body.level._id, body.level._rev, function(err, responseTwo) {
-								if (err) {
-									sendResponse.sendErrorsDBError(res, err);
-								} else {
-									var JSONContent = JSON.stringify(responseTwo);
-									sendResponse.sendObject(res, JSONContent);
-								}
-							});
+							var JSONContent = JSON.stringify(responseTwo);
+							sendResponse.sendObject(res, JSONContent);
 						}
 					});
-				} else {
-					sendResponse.sendErrorsBadContent(res, errors);
 				}
-			} else {
-				sendResponse.sendErrorsBadContent(res, "Error : Bad appID");
-			}
+			});
 		});
 	};
 
@@ -166,45 +95,42 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 	updateLevel = function(req, res) {
 		// Check admin ID
 		var JSONContent = req.body;
-		engine.show('gameEngines', 'allByGameEngineID', {
-			key : req.params.appid
-		}, function(err, response) {
-			if (!err) {
 
-				// Check the login
+		//validate data
+		validator.check(JSONContent.points, "Points is empty").notNull();
+		validator.check(JSONContent.points, "Points invalid integer").isInt();
+		validator.check(JSONContent.name, "Name is empty").notNull();
+		validator.check(JSONContent.description, "Description is empty").notNull();
 
-				// TODO
+		// Check if error are found and flush errors
+		var errors = validator.getErrors();
+		validator.flushErrors();
 
-				//validate data
-				validator.check(JSONContent.points, "Points is empty").notNull();
-				validator.check(JSONContent.points, "Points invalid integer").isInt();
-				validator.check(JSONContent.name, "Name is empty").notNull();
-				validator.check(JSONContent.description, "Description is empty").notNull();
-
-				// Check if error are found and flush errors
-				var errors = validator.getErrors();
-				validator.flushErrors();
-
-				if (errors[0] == null) {
-					engine.atomic("levels", "inplace", req.params.id, JSONContent, function(err, response) {
-						if (err) {
-							sendResponse.sendErrorsDBError(res, err);
-						} else {
-							var JSONContent = JSON.stringify({
-								"response" : response
-							});
-							sendResponse.sendObject(res, JSONContent);
-						}
-					});
-				} else {
-
-					sendResponse.sendErrorsBadContent(res, errors);
-				}
-			} else {
-				sendResponse.sendErrorsBadContent(res, "Error : Bad appID");
-			}
-		});
+		if (errors[0] == null) {
+			gameEngine.checkExistGameEngine(req, res, function() {
+				engine.atomic("levels", "inplace", req.params.id, JSONContent, function(err, doc) {
+					if (err) {
+						sendResponse.sendErrorsDBError(res, err);
+					} else {
+						sendResponse.sendObject(res, levelResponse(doc));
+					}
+				});
+			});
+		} else {
+			sendResponse.sendErrorsBadContent(res, errors);
+		}
 	};
+
+	// Private
+	levelResponse = function(doc) {
+		resObject = {
+			"id" : doc._id,
+			"name" : doc.name,
+			"description" : doc.description,
+			"points" : doc.points
+		};
+		return JSON.stringify(resObject);
+	}
 
 	return {
 		createLevel : createLevel,
