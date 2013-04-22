@@ -20,7 +20,7 @@ define(['express','../variables/expressVariables'], function (express,expressVar
 
 	function errorHandler(err, req, res, next) {
 	  res.status(500);
-	  res.render('error :', { error: err });
+	  res.render('error : BAD CONTENT REQUEST', { error: err });
 	}
 		
 	// Configure server
@@ -29,8 +29,8 @@ define(['express','../variables/expressVariables'], function (express,expressVar
 		app.set('port2',  expressVariables.PORT2);
 		app.set('ip', expressVariables.IP);
 	    app.use(express.logger('dev')); /* 'default', 'short', 'tiny', 'dev' */
-	    app.use(express.bodyParser());
 	    app.use(express.cookieParser());
+	   app.use(express.bodyParser());
 	    app.use(express.session({ secret: 'cool beans' }));
 	    app.use(express.methodOverride());
 	    app.use(expressVariables.allowCrossDomain);

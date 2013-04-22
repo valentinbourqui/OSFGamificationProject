@@ -14,8 +14,6 @@ requirejs.config({
 
 requirejs(['loadRequests','http','https'] ,function(app,http,https){
 	
-	
-
 
 	// Run the server (PORT/IP) http
 	// Notify the user	

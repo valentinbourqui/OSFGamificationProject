@@ -1,55 +1,53 @@
 define(['../../../tools/engine', '../../../tools/validatorContent', '../../../tools/sendResponse'], function(engine, validator, sendResponse) {
 
 	// Add a level for for a sepcified application
+	// spécifier dans le HEADER de la requête : Content-Type : application/json
 	createLevel = function(req, res) {
 		// Check admin ID
-		req.on('data', function(chunk) {
-			var JSONContent = JSON.parse(chunk);
-			engine.show('gameEngines', 'allByGameEngineID', {
-				key : req.params.appid
-			}, function(err, response) {
-				if (!err) {
+		var JSONContent = req.body;
+		engine.show('gameEngines', 'allByGameEngineID', {
+			key : req.params.appid
+		}, function(err, response) {
+			if (!err) {
 
-					// Check the security
+				// Check the security
 
-					// TODO
+				// TODO
 
-					//validate data
-					validator.check(JSONContent.points, "Points is empty").notNull();
-					validator.check(JSONContent.points, "Points invalid integer").isInt();
-					validator.check(JSONContent.name, "Name is empty").notNull();
-					validator.check(JSONContent.description, "Description is empty").notNull();
+				//validate data
+				validator.check(JSONContent.points, "Points is empty").notNull();
+				validator.check(JSONContent.points, "Points invalid integer").isInt();
+				validator.check(JSONContent.name, "Name is empty").notNull();
+				validator.check(JSONContent.description, "Description is empty").notNull();
 
-					// Check if error are found and flush errors
-					var errors = validator.getErrors();
-					validator.flushErrors();
+				// Check if error are found and flush errors
+				var errors = validator.getErrors();
+				validator.flushErrors();
 
-					if (errors[0] == null) {
-						engine.insert({
-							"appID" : req.params.appid,
-							"type" : 'level',
-							"name" : JSONContent.name,
-							"description" : JSONContent.description,
-							"points" : JSONContent.points,
-						}, function(err, body) {
-							if (err) {
-								sendResponse.sendErrorsDBError(res, err);
-							} else {
-								var JSONContent = JSON.stringify({
-									"response" : body
-								});
-								sendResponse.sendObjectCreated(res, JSONContent);
-							}
-						});
-					} else {
-						sendResponse.sendErrorsBadContent(res, errors);
-					}
+				if (errors[0] == null) {
+					engine.insert({
+						"appID" : req.params.appid,
+						"type" : 'level',
+						"name" : JSONContent.name,
+						"description" : JSONContent.description,
+						"points" : JSONContent.points,
+					}, function(err, body) {
+						if (err) {
+							sendResponse.sendErrorsDBError(res, err);
+						} else {
+							var JSONContent = JSON.stringify({
+								"response" : body
+							});
+							sendResponse.sendObjectCreated(res, JSONContent);
+						}
+					});
 				} else {
-					sendResponse.sendErrorsBadContent(res, "Error : Bad appID");
+					sendResponse.sendErrorsBadContent(res, errors);
 				}
-			});
+			} else {
+				sendResponse.sendErrorsBadContent(res, "Error : Bad appID");
+			}
 		});
-
 	};
 
 	// Select all levels for a sepcified application
@@ -164,43 +162,41 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 	// update a level
 	updateLevel = function(req, res) {
 		// Check admin ID
+		var JSONContent = req.body;
 		engine.show('gameEngines', 'allByGameEngineID', {
 			key : req.params.appid
 		}, function(err, response) {
 			if (!err) {
-				req.on('data', function(chunk) {
-					var JSONContent = JSON.parse(chunk);
-					console.log();
-					// Check the login
 
-					// TODO
+				// Check the login
 
-					//validate data
-					validator.check(JSONContent.points, "Points is empty").notNull();
-					validator.check(JSONContent.points, "Points invalid integer").isInt();
-					validator.check(JSONContent.name, "Name is empty").notNull();
-					validator.check(JSONContent.description, "Description is empty").notNull();
+				// TODO
 
-					// Check if error are found and flush errors
-					var errors = validator.getErrors();
-					validator.flushErrors();
+				//validate data
+				validator.check(JSONContent.points, "Points is empty").notNull();
+				validator.check(JSONContent.points, "Points invalid integer").isInt();
+				validator.check(JSONContent.name, "Name is empty").notNull();
+				validator.check(JSONContent.description, "Description is empty").notNull();
 
-					if (errors[0] == null) {
-						engine.atomic("levels", "inplace", req.params.id, JSONContent, function(err, response) {
-							if (err) {
-								sendResponse.sendErrorsDBError(res, err);
-							} else {
-								var JSONContent = JSON.stringify({
-									"response" : response
-								});
-								sendResponse.sendObject(res, JSONContent);
-							}
-						});
-					} else {
+				// Check if error are found and flush errors
+				var errors = validator.getErrors();
+				validator.flushErrors();
 
-						sendResponse.sendErrorsBadContent(res, errors);
-					}
-				});
+				if (errors[0] == null) {
+					engine.atomic("levels", "inplace", req.params.id, JSONContent, function(err, response) {
+						if (err) {
+							sendResponse.sendErrorsDBError(res, err);
+						} else {
+							var JSONContent = JSON.stringify({
+								"response" : response
+							});
+							sendResponse.sendObject(res, JSONContent);
+						}
+					});
+				} else {
+
+					sendResponse.sendErrorsBadContent(res, errors);
+				}
 			} else {
 				sendResponse.sendErrorsBadContent(res, "Error : Bad appID");
 			}

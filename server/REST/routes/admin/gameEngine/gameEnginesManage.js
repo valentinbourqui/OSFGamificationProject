@@ -2,49 +2,46 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 
 	// Create a new game engine
 	createGameEngine = function(req, res) {
-		 
-		req.on('data', function(chunk) {
-			var JSONContent = JSON.parse(chunk);
 
-			//validate data
-			validator.check(JSONContent.name, "Name is empty").notNull();
-			validator.check(JSONContent.description, "Description is empty").notNull();
+		var JSONContent = req.body;
+		
+		//validate data
+		validator.check(JSONContent.name, "Name is empty").notNull();
+		validator.check(JSONContent.description, "Description is empty").notNull();
 
-			// Check if error are found and flush errors
-			var errors = validator.getErrors();
-			validator.flushErrors();
+		// Check if error are found and flush errors
+		var errors = validator.getErrors();
+		validator.flushErrors();
 
-			//Generate the secure key
-			// Check the security on game engine per user
+		//Generate the secure key
+		// Check the security on game engine per user
 
-			// TODO
+		// TODO
 
-			if (errors[0] == null) {
-				engine.insert({
-					"type" : 'gameEngine',
-					"name" : JSONContent.name,
-					"description" : JSONContent.description,
-				}, function(err, response) {
-					if (err) {
-						sendResponse.sendErrorsDBError(res, err);
-					} else {
-						// return all information
+		if (errors[0] == null) {
+			engine.insert({
+				"type" : 'gameEngine',
+				"name" : JSONContent.name,
+				"description" : JSONContent.description,
+			}, function(err, response) {
+				if (err) {
+					sendResponse.sendErrorsDBError(res, err);
+				} else {
+					// return all information
 
-						// TODO
+					// TODO
 
-						var JSONContent = JSON.stringify({
-							"response" : response
-						});
-						sendResponse.sendObjectCreated(res, JSONContent);
-					}
-				});
-			} else {
-				sendResponse.sendErrorsBadContent(res, errors);
-			}
-		});
+					var JSONContent = JSON.stringify({
+						"response" : response
+					});
+					sendResponse.sendObjectCreated(res, JSONContent);
+				}
+			});
+		} else {
+			sendResponse.sendErrorsBadContent(res, errors);
+		}
+
 	};
-	
-	
 
 	// Select a game engine
 	selectGameEngine = function(req, res) {
@@ -96,9 +93,8 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 
 	// Update a game engine
 	updateGameEngine = function(req, res) {
-		req.on('data', function(chunk) {
-			var JSONContent = JSON.parse(chunk);
-			console.log();
+			var JSONContent =req.body;
+
 			// Check the login
 
 			// TODO
@@ -126,7 +122,6 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 
 				sendResponse.sendErrorsBadContent(res, errors);
 			}
-		});
 	};
 
 	return {
