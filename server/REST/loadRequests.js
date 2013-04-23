@@ -1,10 +1,12 @@
 define(['./tools/app',
 		'./routes/admin/level/levelsManage',
+		'./routes/admin/badge/badgesManage',
 		'./routes/admin/gameEngine/gameEnginesManage'
 		], 
 		function (
 		app,
 		adminLevels,
+		adminBadges,
 		adminGameEngine
 		) {
 			
@@ -23,6 +25,13 @@ define(['./tools/app',
 	app.put('/admin/:appid/level/:id',adminLevels.updateLevel);
 	app.delete('/admin/:appid/level/:id',adminLevels.deleteLevel);
 	app.get('/admin/:appid/levels',adminLevels.selectAllLevels);
+
+	// Badges call and manage
+	app.post("/admin/:appid/badge",adminBadges.createBadge);
+	app.get('/admin/:appid/badge/:id',adminBadges.selectBadge);
+	app.put('/admin/:appid/badge/:id',adminBadges.updateBadge);
+	app.delete('/admin/:appid/badge/:id',adminBadges.deleteBadge);
+	app.get('/admin/:appid/badges',adminBadges.selectAllBadges);
 	
 	// ############################################# DEFINE RESQUESTS FOR CLIENT SIDE #############################################
 		

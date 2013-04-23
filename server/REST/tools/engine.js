@@ -18,6 +18,8 @@ define(['../variables/cradleVariables'], function (cradleVariables) {
 			      console.log('Views game engine created.');
 			      require('./routes/admin/level/level');
 			      console.log('Views levels created.');
+			      require('./routes/admin/badge/badge');
+			      console.log('Views badges created.');
 			 }
 
 		});

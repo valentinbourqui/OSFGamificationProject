@@ -5,9 +5,10 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		var JSONContent = req.body;
 
 		// Data Validation
-		validator.check(req.is('json'), "Content-type must to be json").equals(true);
-		validator.check(JSONContent.name, "Name is empty").notNull();
-		validator.check(JSONContent.description, "Description is empty").notNull();
+		validator.check(req.is('json'), validator.CONTENT_TYPE_NOT_JSON).equals(true);
+		validator.check(JSONContent.name, validator.NAME_EMPTY).notNull();
+		validator.check(JSONContent.description, validator.DESCRIPTION_EMPTY).notNull();
+
 		//TODO : Check if the user doesn't give others incorrects attributes
 
 		// Check if error are found and flush errors
@@ -70,7 +71,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 					if (err) {
 						sendResponse.sendErrorsDBError(res, err);
 					} else {
-						engine.view('gameEngines', "allObjcetsByAppID", {
+						engine.view('gamEngine', "allObjcetsByAppID", {
 							key : req.params.appid
 						}, function(err, body) {
 							if (err) {
@@ -100,9 +101,9 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		// TODO
 
 		//validate data
-		validator.check(req.is('json'), "Content-type must to be json").equals(true);
-		validator.check(JSONContent.name, "Name is empty").notNull();
-		validator.check(JSONContent.description, "Description is empty").notNull();
+		validator.check(req.is('json'), validator.CONTENT_TYPE_NOT_JSON).equals(true);
+		validator.check(JSONContent.name, validator.NAME_EMPTY).notNull();
+		validator.check(JSONContent.description, validator.DESCRIPTION_EMPTY).notNull();
 
 		// Check if error are found and flush errors
 		var errors = validator.getErrors();
@@ -149,7 +150,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		};
 		return JSON.stringify(resObject);
 	}
-
+	
 	return {
 		createGameEngine : createGameEngine,
 		selectGameEngine : selectGameEngine,

@@ -7,10 +7,11 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		var JSONContentLevel = req.body;
 
 		//validate data
-		validator.check(JSONContentLevel.points, "Points is empty").notNull();
-		validator.check(JSONContentLevel.points, "Points invalid integer").isInt();
-		validator.check(JSONContentLevel.name, "Name is empty").notNull();
-		validator.check(JSONContentLevel.description, "Description is empty").notNull();
+		validator.check(req.is('json'), validator.CONTENT_TYPE_NOT_JSON).equals(true);
+		validator.check(JSONContentLevel.points, validator.POINTS_EMPTY).notNull();
+		validator.check(JSONContentLevel.points, validator.POINTS_NOT_INTEGER).isInt();
+		validator.check(JSONContentLevel.name, validator.NAME_EMPTY).notNull();
+		validator.check(JSONContentLevel.description, validator.DESCRIPTION_EMPTY).notNull();
 
 		// Check if error are found and flush errors
 		var errors = validator.getErrors();
@@ -18,18 +19,12 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 
 		if (errors[0] == null) {
 			gameEngine.checkExistGameEngine(req, res, function() {
-				engine.insert({
-					"appID" : req.params.appid,
-					"type" : 'level',
-					"name" : JSONContentLevel.name,
-					"description" : JSONContentLevel.description,
-					"points" : JSONContentLevel.points
-				}, function(err, resp) {
+				engine.insert(levelStorage(JSONContentLevel, req.params.appid), function(err, resp) {
 					if (err) {
 						sendResponse.sendErrorsDBError(res, err);
 					} else {
 						engine.show('levels', 'allByLevelID', resp.id, function(err, doc) {
-							sendResponse.sendObjectCreated(res, levelResponse(doc.level));
+							sendResponse.sendObjectCreated(res, levelStringResponse(doc.level));
 						});
 					}
 				});
@@ -42,7 +37,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 	// Select all levels for a sepcified application
 	selectAllLevels = function(req, res) {
 		gameEngine.checkExistGameEngine(req, res, function() {
-			engine.view('levels', "allByAppID", {
+			engine.view('levels', "all", {
 				key : req.params.appid
 			}, function(err, body) {
 				if (err) {
@@ -63,7 +58,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 					sendResponse.sendErrorsNotFound(res, "Level not found");
 					return;
 				}
-				sendResponse.sendObject(res, levelResponse(doc.level));
+				sendResponse.sendObject(res, levelStringResponse(doc.level));
 			});
 		});
 	};
@@ -97,10 +92,11 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		var JSONContent = req.body;
 
 		//validate data
-		validator.check(JSONContent.points, "Points is empty").notNull();
-		validator.check(JSONContent.points, "Points invalid integer").isInt();
-		validator.check(JSONContent.name, "Name is empty").notNull();
-		validator.check(JSONContent.description, "Description is empty").notNull();
+		validator.check(req.is('json'), validator.CONTENT_TYPE_NOT_JSON).equals(true);
+		validator.check(JSONContentLevel.points, validator.POINTS_EMPTY).notNull();
+		validator.check(JSONContentLevel.points, validator.POINTS_NOT_INTEGER).isInt();
+		validator.check(JSONContentLevel.name, validator.NAME_EMPTY).notNull();
+		validator.check(JSONContentLevel.description, validator.DESCRIPTION_EMPTY).notNull();
 
 		// Check if error are found and flush errors
 		var errors = validator.getErrors();
@@ -112,7 +108,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 					if (err) {
 						sendResponse.sendErrorsDBError(res, err);
 					} else {
-						sendResponse.sendObject(res, levelResponse(doc));
+						sendResponse.sendObject(res, levelStringResponse(doc));
 					}
 				});
 			});
@@ -122,14 +118,24 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 	};
 
 	// Private
-	levelResponse = function(doc) {
-		resObject = {
+	levelStringResponse = function(doc) {
+		var level = {
 			"id" : doc._id,
 			"name" : doc.name,
 			"description" : doc.description,
 			"points" : doc.points
 		};
-		return JSON.stringify(resObject);
+		return JSON.stringify(level);
+	}
+	levelStorage = function(body, appid) {
+		var level = {
+			"appID" : appid,
+			"type" : 'level',
+			"name" : body.name,
+			"description" : body.description,
+			"points" : body.points
+		}
+		return level;
 	}
 
 	return {
