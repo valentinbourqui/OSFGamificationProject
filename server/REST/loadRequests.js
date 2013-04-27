@@ -2,6 +2,9 @@ define(['./tools/app',
 		'./routes/admin/level/levelsManage',
 		'./routes/admin/badge/badgesManage',
 		'./routes/admin/event/eventsManage',
+	    './routes/application/user/usersManage',
+	    './routes/application/event/eventsManage',
+	    './routes/application/leaderboard/leaderboardsManage',
 		'./routes/admin/gameEngine/gameEnginesManage'
 		], 
 		function (
@@ -9,6 +12,9 @@ define(['./tools/app',
 		adminLevels,
 		adminBadges,
 		adminEvents,
+		appUser,
+		appEvent,
+		appLeaderboard,
 		adminGameEngine
 		) {
 			
@@ -43,5 +49,17 @@ define(['./tools/app',
 	app.get('/admin/:appid/events',adminEvents.selectAllEvents);	
 	// ############################################# DEFINE RESQUESTS FOR CLIENT SIDE #############################################
 		
+    // user call and manage
+	app.post("/app/:appid/user",appUser.createUser);
+	app.get('/app/:appid/user/:id',appUser.selectUser);
+	app.delete('/app/:appid/user/:id',appUser.deleteUser);
+	
+	// event call and manage
+	app.get('/app/:appid/user/userid/event',appEvent.notifyEvent);
+	
+	// leaderboard call and manage
+	app.get('/app/:appid/user/:id',appLeaderboard.selectLeaderboard);
+	app.get('/app/:appid/user/:id',appLeaderboard.selectUserLeaderboard);
+	
 	return app;
 });

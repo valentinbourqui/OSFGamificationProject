@@ -8,7 +8,6 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 
 		//validate data
 		validator.check(req.is('json'), validator.CONTENT_TYPE_NOT_JSON).equals(true);
-
 		validator.check(JSONContentEvent.name, validator.NAME_EMPTY).notNull();
 		validator.check(JSONContentEvent.description, validator.DESCRIPTION_EMPTY).notNull();
 		validator.check(JSONContentEvent.eventId, validator.EVENT_ID_EMPTY).notNull();
