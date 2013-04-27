@@ -10,7 +10,7 @@ define(['../variables/cradleVariables'], function (cradleVariables) {
 		, callback = console.log // this would normally be some callback
 		, cookies  = {} // store cookies, normally redis or something
 		;
-				
+	    require('./routes/admin/gameEngine/gameEngine');
 		nano.db.create('osf_database', function(err, body) {
 			  if (!err) {
   				  console.log('database created.');

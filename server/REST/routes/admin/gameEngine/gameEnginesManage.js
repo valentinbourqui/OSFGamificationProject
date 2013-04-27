@@ -67,29 +67,28 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 			} else if (body.gameEngine == null) {
 				sendResponse.sendWariningDelete(res, "Object Not found");
 			} else {
-				engine.destroy(body.gameEngine._id, body.gameEngine._rev, function(err, responseTwo) {
+				engine.destroy(body.gameEngine._id, body.gameEngine._rev, function(err, responseGameEngineOK) {
 					if (err) {
 						sendResponse.sendErrorsDBError(res, err);
 					} else {
-						engine.view('gamEngine', "allObjcetsByAppID", {
-							key : req.params.appid
-						}, function(err, body) {
+							engine.view('gameEngines', "allObjcetsByAppID", {
+							key : [req.params.appid]
+						}, function(err, doc) {
 							if (err) {
 								sendResponse.sendErrorsDBError(res, err);
 							} else {
-								for (var i in body.row) {
-									engine.destroy(body.row[i]._id, body.row[i]._rev);
-								}
-								var JSONContent = JSON.stringify(body);
+								doc.rows.forEach(function(doc) { 
+									engine.destroy(doc.value._id, doc.value._rev);
+								});
+								var JSONContent = JSON.stringify(responseGameEngineOK);
 								sendResponse.sendObject(res, JSONContent);
 							}
 						});
-						var JSONContent = JSON.stringify(responseTwo);
-						sendResponse.sendObject(res, JSONContent);
 					}
 				});
 			}
 		});
+	
 	};
 
 	// Update a game engine
@@ -142,7 +141,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 	// Private
 	gameEngineResponse = function(doc) {
 		resObject = {
-			"id" : doc._id,
+			"app-id" : doc._id,
 			"name" : doc.name,
 			"description" : doc.description,
 			"APIKey" : doc.APIKey,

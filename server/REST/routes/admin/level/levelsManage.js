@@ -27,6 +27,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 							sendResponse.sendObjectCreated(res, levelStringResponse(doc.level));
 						});
 					}
+
 				});
 			});
 		} else {
@@ -37,14 +38,13 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 	// Select all levels for a sepcified application
 	selectAllLevels = function(req, res) {
 		gameEngine.checkExistGameEngine(req, res, function() {
-			engine.view('levels', "all", {
-				key : req.params.appid
-			}, function(err, body) {
+			engine.view('levels', "allLevelsByAppID", {
+				key : [req.params.appid, "level"]
+			}, function(err, doc) {
 				if (err) {
 					sendResponse.sendErrorsDBError(res, err);
 				} else {
-					var JSONContent = JSON.stringify(body);
-					sendResponse.sendObject(res, JSONContent);
+					sendResponse.sendObject(res, levelsStringResponse(doc));
 				}
 			});
 		});
@@ -89,7 +89,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 	// update a level
 	updateLevel = function(req, res) {
 		// Check admin ID
-		var JSONContent = req.body;
+		var JSONContentLevel = req.body;
 
 		//validate data
 		validator.check(req.is('json'), validator.CONTENT_TYPE_NOT_JSON).equals(true);
@@ -104,7 +104,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 
 		if (errors[0] == null) {
 			gameEngine.checkExistGameEngine(req, res, function() {
-				engine.atomic("levels", "inplace", req.params.id, JSONContent, function(err, doc) {
+				engine.atomic("levels", "inplace", req.params.id, JSONContentLevel, function(err, doc) {
 					if (err) {
 						sendResponse.sendErrorsDBError(res, err);
 					} else {
@@ -126,6 +126,21 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 			"points" : doc.points
 		};
 		return JSON.stringify(level);
+	}
+	levelsStringResponse = function(doc) {
+		var jsonObj = []; //declare object
+		doc.rows.forEach(function(doc) { 
+			jsonObj.push({
+				"id" : doc.value._id,
+				"name" : doc.value.name,
+				"description" : doc.value.description,
+				"points" : doc.value.points
+			});
+		});
+		var levels = {
+			"levels" : jsonObj
+		};
+		return JSON.stringify(levels);
 	}
 	levelStorage = function(body, appid) {
 		var level = {

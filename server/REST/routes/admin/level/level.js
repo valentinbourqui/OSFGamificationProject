@@ -4,9 +4,8 @@ define(['../../../tools/engine'], function (engine) {
 		{ "views": 
 		    { "allLevelsByAppID": 
 		    	{  
-					map: function (doc,req) {
-					   var body = JSON.parse(req.body);
-					   if (doc.type =="level" && body.key == doc.appID) emit(doc.appID, doc);
+					map: function (doc) {
+					 emit([doc.appID,doc.type], doc);
 					}
 				}
 			}

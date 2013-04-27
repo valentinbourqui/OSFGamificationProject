@@ -5,9 +5,8 @@ define(['../../../tools/engine'], function (engine) {
 		  { "views": 
 		    { "allObjcetsByAppID": 
 		    	{  
-					map: function (doc,req) {
-					   var body = JSON.parse(req.body);
-					   if (body.key == doc.appID) emit(doc.appID, doc);
+					map: function (doc) {
+						emit([doc.appID], doc);
 					}
 				}
 			}
