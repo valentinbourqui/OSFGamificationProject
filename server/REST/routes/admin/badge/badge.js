@@ -5,8 +5,7 @@ define(['../../../tools/engine'], function (engine) {
 		    { "allBadgesByAppID": 
 		    	{  
 					map: function (doc,req) {
-					   var body = JSON.parse(req.body);
-					   if (doc.type =="badge" && body.key == doc.appID) emit(doc.appID, doc);
+					  emit([doc.appID,doc.type], doc);
 					}
 				}
 			}
@@ -23,6 +22,7 @@ define(['../../../tools/engine'], function (engine) {
        				 var body = JSON.parse(req.body);
           			 doc.name = body.name;
           			 doc.description = body.description;
+          			 doc.URLBadge = body.URLBadge;
           			 doc.points = body.points;
           			 return [doc, JSON.stringify(doc)];
 				}

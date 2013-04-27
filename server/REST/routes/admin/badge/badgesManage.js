@@ -9,11 +9,14 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		//validate data
 		validator.check(req.is('json'), validator.CONTENT_TYPE_NOT_JSON).equals(true);
 		if (JSONContentBadge.points)
-			validator.check(JSONContentBadge.points, validator.POINTS_NOT_INTEGER).isInt();
+		validator.check(JSONContentBadge.points, validator.POINTS_NOT_INTEGER).isInt();
 		validator.check(JSONContentBadge.name, validator.NAME_EMPTY).notNull();
 		validator.check(JSONContentBadge.description, validator.DESCRIPTION_EMPTY).notNull();
-		validator.check(JSONContentBadge.URLbadge, validator.URL_BADGE_EMPTY).notNull();
-
+		validator.check(JSONContentBadge.URLBadge, validator.URL_BADGE_EMPTY).notNull();
+		validator.check(JSONContentBadge.URLBadge, validator.URL_BADGE_NOT_CORRECT).isUrl();
+		validator.check(JSONContentBadge.URLBadge).checkIfImage();
+  
+    
 		// Check if error are found and flush errors
 		var errors = validator.getErrors();
 		validator.flushErrors();
@@ -38,14 +41,13 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 	// Select all badges for a sepcified application
 	selectAllBadges = function(req, res) {
 		gameEngine.checkExistGameEngine(req, res, function() {
-			engine.view('badges', "allByAppID", {
-				key : req.params.appid
+			engine.view('badges', "allBadgesByAppID", {
+				key : [req.params.appid,"badge"]
 			}, function(err, body) {
 				if (err) {
 					sendResponse.sendErrorsDBError(res, err);
 				} else {
-					var JSONContent = JSON.stringify(body);
-					sendResponse.sendObject(res, JSONContent);
+					sendResponse.sendObject(res, badgesStringResponse(body));
 				}
 			});
 		});
@@ -99,8 +101,10 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 			validator.check(JSONContentBadge.points, validator.POINTS_NOT_INTEGER).isInt();
 		validator.check(JSONContentBadge.name, validator.NAME_EMPTY).notNull();
 		validator.check(JSONContentBadge.description, validator.DESCRIPTION_EMPTY).notNull();
-		validator.check(JSONContentBadge.URLbadge, validator.URL_BADGE_EMPTY).notNull();
-
+		validator.check(JSONContentBadge.URLBadge, validator.URL_BADGE_EMPTY).notNull();
+		validator.check(JSONContentBadge.URLBadge, validator.URL_BADGE_NOT_CORRECT).isUrl();
+		validator.check(JSONContentBadge.URLBadge).checkIfImage();
+		
 		// Check if error are found and flush errors
 		var errors = validator.getErrors();
 		validator.flushErrors();
@@ -126,10 +130,26 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 			"id" : doc._id,
 			"name" : doc.name,
 			"description" : doc.description,
-			"URLbadge" : doc.URLbadge,
+			"URLBadge" : doc.URLBadge,
 			"points" : doc.points
 		};
 		return JSON.stringify(badge);
+	}
+	badgesStringResponse = function(doc) {
+		var jsonObj = []; //declare object
+		doc.rows.forEach(function(doc) { 
+			jsonObj.push({
+				"id" : doc.value._id,
+				"name" : doc.value.name,
+				"description" : doc.value.description,
+				"URLBadge" : doc.URLBadge,
+				"points" : doc.value.points
+			});
+		});
+		var badges = {
+			"badges" : jsonObj
+		};
+		return JSON.stringify(badges);
 	}
 	badgeStorage = function(body, appid) {
 		var badge = {
@@ -137,7 +157,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 			"type" : 'badge',
 			"name" : body.name,
 			"description" : body.description,
-			"URLbadge" : body.URLbadge,
+			"URLBadge" : body.URLBadge,
 			"points" : body.points
 		}
 		return badge;
