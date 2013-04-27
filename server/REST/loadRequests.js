@@ -1,12 +1,14 @@
 define(['./tools/app',
 		'./routes/admin/level/levelsManage',
 		'./routes/admin/badge/badgesManage',
+		'./routes/admin/event/eventsManage',
 		'./routes/admin/gameEngine/gameEnginesManage'
 		], 
 		function (
 		app,
 		adminLevels,
 		adminBadges,
+		adminEvents,
 		adminGameEngine
 		) {
 			
@@ -33,6 +35,12 @@ define(['./tools/app',
 	app.delete('/admin/:appid/badge/:id',adminBadges.deleteBadge);
 	app.get('/admin/:appid/badges',adminBadges.selectAllBadges);
 	
+	// Events call and mange 	
+	app.post("/admin/:appid/event",adminEvents.createEvent);
+	app.get('/admin/:appid/event/:id',adminEvents.selectEvent);
+	app.put('/admin/:appid/event/:id',adminEvents.updateEvent);
+	app.delete('/admin/:appid/event/:id',adminEvents.deleteEvent);
+	app.get('/admin/:appid/events',adminEvents.selectAllEvents);	
 	// ############################################# DEFINE RESQUESTS FOR CLIENT SIDE #############################################
 		
 	return app;

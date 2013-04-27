@@ -80,8 +80,19 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 						if (err) {
 							sendResponse.sendErrorsDBError(res, err);
 						} else {
-							var JSONContent = JSON.stringify(responseTwo);
-							sendResponse.sendObject(res, JSONContent);
+								engine.view('badges', "allEventsBybadgeID", {
+								key : [req.params.appid,"event",req.params.id]
+							}, function(err, doc) {
+								if (err) {
+									sendResponse.sendErrorsDBError(res, err);
+								} else {
+									doc.rows.forEach(function(doc) { 
+										engine.destroy(doc.value._id, doc.value._rev);
+									});
+									var JSONContent = JSON.stringify(responseTwo);
+									sendResponse.sendObject(res, JSONContent);
+								}
+							});
 						}
 					});
 				}
@@ -124,6 +135,22 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		}
 	};
 
+	//Utils
+	checkExistBadge = function(req, res,value, func) {
+		engine.show('badges', 'allByBadgeID', value, function(err, response) {
+			if (!err) {
+				//TODO: Check the security
+				JSONContentEngine = response.badge;
+				if (JSONContentEngine == null) {
+					sendResponse.sendErrorsNotFound(res, "ID for Badge not found");
+					return;
+				}
+				func();
+			} else {
+				sendResponse.sendErrorsBadContent(res, "Error : Bad Content");
+			}
+		});
+	};
 	// Private
 	badgeStringResponse = function(doc) {
 		var badge = {
@@ -168,8 +195,8 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		selectBadge : selectBadge,
 		updateBadge : updateBadge,
 		deleteBadge : deleteBadge,
-		selectAllBadges : selectAllBadges
+		selectAllBadges : selectAllBadges,
+		checkExistBadge : checkExistBadge
 	}
 
 });
-

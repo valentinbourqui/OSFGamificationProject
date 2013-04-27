@@ -2,25 +2,17 @@ define(['../../../tools/engine'], function (engine) {
 	 // We define a Badge with a custom view
  	engine.insert(
 		{ "views": 
-		    { "allBadgesByAppID": 
+		    { "allEventsByAppID": 
 		    	{  
-					map: function (doc,req) {
+					map: function (doc) {
 					  emit([doc.appID,doc.type], doc);
 					}
 				}
 			}
-		  ,"views": 
-		    { "allEventsBybadgeID": 
-		    	{  
-					map: function (doc,req) {
-					  emit([doc.appID,doc.type,doc.value], doc);
-					}
-				}
-			}
 		  , "shows": 
-			{ "allByBadgeID": function(doc, req) 
+			{ "allByeventID": function(doc, req) 
 				{
-       				return { body: JSON.stringify({ badge : doc }) };
+       				return { body: JSON.stringify({ event : doc }) };
 				}
 			}
 			
@@ -30,11 +22,12 @@ define(['../../../tools/engine'], function (engine) {
        				 var body = JSON.parse(req.body);
           			 doc.name = body.name;
           			 doc.description = body.description;
-          			 doc.URLBadge = body.URLBadge;
-          			 doc.points = body.points;
+          			 doc.eventId = body.eventId;
+          			 doc.eventType = body.eventType;
+          			 doc.value = body.value;
           			 return [doc, JSON.stringify(doc)];
 				}
 			}
-		}, '_design/badges'
+		}, '_design/events'
 	);
 });

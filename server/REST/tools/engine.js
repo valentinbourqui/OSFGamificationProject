@@ -10,7 +10,7 @@ define(['../variables/cradleVariables'], function (cradleVariables) {
 		, callback = console.log // this would normally be some callback
 		, cookies  = {} // store cookies, normally redis or something
 		;
-	    		
+	     		    
 		nano.db.create('osf_database', function(err, body) {
 			  if (!err) {
   				  console.log('database created.');
@@ -18,8 +18,10 @@ define(['../variables/cradleVariables'], function (cradleVariables) {
 			      console.log('Views game engine created.');
 			      require('./routes/admin/level/level');
 			      console.log('Views levels created.');
-		 			require('./routes/admin/badge/badge');
+		 		  require('./routes/admin/badge/badge');
 			      console.log('Views badges created.');
+			      require('./routes/admin/event/event');
+			      console.log('Views events created.');
 			 }
 
 		});
