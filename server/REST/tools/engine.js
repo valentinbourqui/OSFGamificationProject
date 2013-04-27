@@ -22,6 +22,8 @@ define(['../variables/cradleVariables'], function (cradleVariables) {
 			      console.log('Views badges created.');
 			      require('./routes/admin/event/event');
 			      console.log('Views events created.');
+ 			      require('./routes/application/user/user');
+			      console.log('Views users created.');
 			 }
 
 		});
