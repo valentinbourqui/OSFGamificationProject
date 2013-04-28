@@ -117,6 +117,36 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		}
 	};
 
+	//utils 
+	
+	checkFirstLevelExist = function(req, res,appid, func) {
+		engine.view('levels', "selectFirstLevel", {
+				key : [appid,"level", 0]
+			}, function(err, doc) {
+				if (err) {
+					sendResponse.sendErrorsDBError(res, err);
+				} else {
+					
+					if(doc.rows[0] != null){
+						func(doc.rows[0].value._id);
+					}
+					else{
+						func(0);
+					}
+				}
+			});
+	};
+
+	selectLevelUtils = function(id, func) {
+		engine.show('levels', 'allByLevelID', id, function(err, doc) {
+			if (doc.level == null) {
+				func(null);
+			} else {
+				func(levelStringResponseUtils(doc.level));
+			}
+		});
+	};
+
 	// Private
 	levelStringResponse = function(doc) {
 		var level = {
@@ -127,6 +157,16 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		};
 		return JSON.stringify(level);
 	}
+	levelStringResponseUtils = function(doc) {
+		var level = {
+			"id" : doc._id,
+			"name" : doc.name,
+			"description" : doc.description,
+			"points" : doc.points
+		};
+		return level;
+	}
+	
 	levelsStringResponse = function(doc) {
 		var jsonObj = []; //declare object
 		doc.rows.forEach(function(doc) { 
@@ -158,7 +198,9 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		selectLevel : selectLevel,
 		updateLevel : updateLevel,
 		deleteLevel : deleteLevel,
-		selectAllLevels : selectAllLevels
+		selectAllLevels : selectAllLevels,
+		checkFirstLevelExist: checkFirstLevelExist,
+		selectLevelUtils:selectLevelUtils
 	}
 
 });

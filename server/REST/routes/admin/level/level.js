@@ -9,6 +9,14 @@ define(['../../../tools/engine'], function (engine) {
 					}
 				}
 			}
+		  ,"views": 
+		    { "selectFirstLevel": 
+		    	{  
+					map: function (doc) {
+					 emit([doc.appID,doc.type,doc.points], doc);
+					}
+				}
+			}
 		  , "shows": 
 			{ "allByLevelID": function(doc, req) 
 				{

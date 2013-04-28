@@ -1,36 +1,55 @@
-define(['../../../tools/engine', '../../../tools/validatorContent', '../../../tools/sendResponse', '../../admin/gameEngine/gameEnginesManage'], function(engine, validator, sendResponse, gameEngine) {
+define(['../../../tools/engine',
+		'../../../tools/validatorContent', 
+		'../../../tools/sendResponse', 
+		'../../admin/gameEngine/gameEnginesManage',
+		'../../admin/level/levelsManage'],
+		function(
+			engine, 
+			validator, 
+			sendResponse, 
+			gameEngine,
+			levelManage) {
+
 
 	// Add a user for for a sepcified application
 	createUser = function(req, res) {
 		// Check admin ID
-		
-		// TODO check si un level 0 existe et mettre l'id 
-		
 		gameEngine.checkExistGameEngine(req, res, function() {
-			engine.insert(userStorage(req.params.appid), function(err, resp) {
-				if (err) {
-					sendResponse.sendErrorsDBError(res, err);
-				} else {
-					engine.show('users', 'allByUserID', resp.id, function(err, doc) {
-						sendResponse.sendObjectCreated(res, userStringResponse(doc.user));
-					});
-				}
+			levelManage.checkFirstLevelExist(req, res, req.params.appid, function(idLevel) {
+				engine.insert(userStorage(req.params.appid,idLevel), function(err, resp) {
+					if (err) {
+						sendResponse.sendErrorsDBError(res, err);
+					} else {
+						engine.show('users', 'allByUserID', resp.id, function(err, doc) {
+							levelManage.selectLevelUtils(doc.user.levelID , function(level){
+							if(level==null)
+								sendResponse.sendObjectCreated(res, userStringResponse(doc.user));
+							else
+								sendResponse.sendObjectCreated(res, userStringResponse(doc.user,level));
+							});
+						});
+					}
+				});
 			});
 		});
 	};
-	
+
 	// Select a user for a sepcified application
 	selectUser = function(req, res) {
-		/*gameEngine.checkExistGameEngine(req, res, function() {
-			engine.show('badges', 'allByBadgeID', req.params.id, function(err, doc) {
-				if (doc.badge == null) {
-					sendResponse.sendErrorsNotFound(res, "Badge not found");
-					return;
-				}
-				sendResponse.sendObject(res, badgeStringResponse(doc.badge));
+		
+		// TODO ADD BADGES INFORMATIONS
+		
+		gameEngine.checkExistGameEngine(req, res, function() {
+			engine.show('users', 'allByUserID', req.params.id, function(err, doc) {
+				levelManage.selectLevelUtils(doc.user.levelID, function(level) {
+					if (level == null)
+						sendResponse.sendObjectCreated(res, userStringResponse(doc.user));
+					else
+						sendResponse.sendObjectCreated(res, userStringResponse(doc.user, level));
+				});
 			});
-		});*/
-	};
+		});
+	}; 
 
 	// delete a user
 	deleteUser = function(req, res) {
@@ -65,12 +84,20 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		};
 		return JSON.stringify(user);
 	}
-	userStorage = function(appid) {
+	userStringResponse = function(doc,level) {
+		var user = {
+			"id" : doc._id,
+			"points" : doc.points,
+			"level": level
+		};
+		return JSON.stringify(user);
+	}
+	userStorage = function(appid,idLevel) {
 		var user = {
 			"appID" : appid,
 			"points" : 0,
 			"type" : "user",
-			"levelID" : 0,
+			"levelID" : idLevel,
 			"badgesIDList" : []
 		}
 		return user;
