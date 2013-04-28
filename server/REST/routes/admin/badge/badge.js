@@ -15,6 +15,12 @@ define(['../../../tools/engine'], function (engine) {
 					  emit([doc.appID,doc.type,doc.value], doc);
 					}
 				}
+	     ,"allBadgesByID": 
+		    	{  
+					map: function (doc,req) {
+					  emit([doc._id], doc);
+					}
+				}
 			}
 		  , "shows": 
 			{ "allByBadgeID": function(doc, req) 

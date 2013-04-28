@@ -2,13 +2,15 @@ define(['../../../tools/engine',
 		'../../../tools/validatorContent', 
 		'../../../tools/sendResponse', 
 		'../../admin/gameEngine/gameEnginesManage',
-		'../../admin/level/levelsManage'],
+		'../../admin/level/levelsManage',
+		'../../admin/badge/badgesManage'],
 		function(
 			engine, 
 			validator, 
 			sendResponse, 
 			gameEngine,
-			levelManage) {
+			levelManage,
+			badgeManage) {
 
 
 	// Add a user for for a sepcified application
@@ -50,11 +52,17 @@ define(['../../../tools/engine',
 				if (err || doc.user == null) {
 					sendResponse.sendErrorsBadContent(res, "Error : Bad Content");
 				} else {
-					levelManage.selectLevelUtils(doc.user.levelID, function(level) {
-						if (level == null)
-							sendResponse.sendObjectCreated(res, userStringResponse(doc.user));
-						else
-							sendResponse.sendObjectCreated(res, userStringResponse(doc.user, level));
+					badgeManage.selectbadgesUtils(doc.user.badgesIDList, function(badges) {
+						levelManage.selectLevelUtils(doc.user.levelID, function(level) {
+							if (level == null && badges == null)
+								sendResponse.sendObjectCreated(res, userStringResponse(doc.user));
+							else if(badges ==null)
+								sendResponse.sendObjectCreated(res, userStringResponse(doc.user, level));
+						    else if(level ==null)
+								sendResponse.sendObjectCreated(res, userStringResponseBadges(doc.user, badges));
+						    else
+								sendResponse.sendObjectCreated(res, userStringResponse(doc.user, level,badges));
+						});
 					});
 				}
 			});
@@ -127,7 +135,36 @@ define(['../../../tools/engine',
 				});
 		});
 	};
-	
+
+	updateUserBadge = function(req, res, user, badgeID, isNewBadge, jsonObj) {
+		badgeManage.selectbadgeUtils(badgeID, function(badge) {
+			if (isNewBadge && (badge.points == null || badge.points <= user.points)) {
+				jsonObj.push({
+					"badgeID" : badgeID,
+				});
+			}
+			user.badgesIDList = jsonObj;
+			engine.atomic("users", "inplace", user._id, user, function(err, resp) {
+				if (err) {
+					sendResponse.sendErrorsDBError(res, err);
+				} else {
+					engine.show('users', 'allByUserID', resp._id, function(err, doc) {
+						if (err || doc.user == null) {
+							sendResponse.sendErrorsBadContent(res, "Error : Bad Content");
+						} else {
+							if (isNewBadge && (badge.points == null || badge.points <= user.points)) 
+								sendResponse.sendObjectCreated(res, userStringResponseBadge(doc.user, badge));
+							else
+						    	sendResponse.sendObjectCreated(res, userStringResponse(doc.user));
+								
+						}
+					});
+				}
+			});
+		});
+	}; 
+
+
 	// Private
 	userStringResponse = function(doc) {
 		var user = {
@@ -141,6 +178,31 @@ define(['../../../tools/engine',
 			"id" : doc._id,
 			"points" : doc.points,
 			"level": level
+		};
+		return JSON.stringify(user);
+	}
+	userStringResponse = function(doc,level,badges) {
+		var user = {
+			"id" : doc._id,
+			"points" : doc.points,
+			"level": level,
+			"badges": badges
+		};
+		return JSON.stringify(user);
+	}
+	userStringResponseBadge = function(doc,badge) {
+		var user = {
+			"id" : doc._id,
+			"points" : doc.points,
+			"badge": badge
+		};
+		return JSON.stringify(user);
+	}
+	userStringResponseBadges = function(doc,badges) {
+		var user = {
+			"id" : doc._id,
+			"points" : doc.points,
+			"badges": badges
 		};
 		return JSON.stringify(user);
 	}
@@ -160,7 +222,8 @@ define(['../../../tools/engine',
 		selectUser : selectUser,
 		deleteUser : deleteUser,
 		checkExistUser: checkExistUser,
-		updateUserLevel: updateUserLevel
+		updateUserLevel: updateUserLevel,
+		updateUserBadge:updateUserBadge
 	}
 
 });

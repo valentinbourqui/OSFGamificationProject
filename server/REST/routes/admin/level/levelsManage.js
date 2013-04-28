@@ -118,31 +118,30 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 	};
 
 	//utils 
-	
-	checkLevel = function(req, res,appid,points, func) {
-		engine.view('levels', "allLevelsByAppID", {
-				key : [appid,"level"]
+
+		checkLevel = function(req, res, appid, points, func) {
+			engine.view('levels', "allLevelsByAppID", {
+				key : [appid, "level"]
 			}, function(err, doc) {
 				if (err) {
 					sendResponse.sendErrorsDBError(res, err);
 				} else {
 					var IDLevel = null;
 					var newPoints = 0;
-					doc.rows.forEach(function(doc) { 
-						if(doc.value.points <= points && doc.value.points>=newPoints){
+					doc.rows.forEach(function(doc) {
+						if (doc.value.points <= points && doc.value.points >= newPoints) {
 							newPoints = doc.value.points;
 							IDLevel = doc.value._id;
 						}
 					});
-					if(IDLevel != null){
+					if (IDLevel != null) {
 						func(IDLevel);
-					}
-					else{
+					} else {
 						func(0);
 					}
 				}
 			});
-	};
+		}; 
 
 	selectLevelUtils = function(id, func) {
 		engine.show('levels', 'allByLevelID', id, function(err, doc) {

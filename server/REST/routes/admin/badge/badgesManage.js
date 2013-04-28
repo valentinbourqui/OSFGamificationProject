@@ -151,6 +151,40 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 			}
 		});
 	};
+	
+	//utils 
+
+		selectbadgeUtils = function(id, func) {
+			engine.show('badges', 'allByBadgeID', id, function(err, doc) {
+				if (doc.badge == null) {
+					sendResponse.sendErrorsNotFound(res, "Badge not found");
+				}
+				func(badgeResponse(doc.badge));
+			});
+
+		}; 
+
+	selectbadgesUtils = function(badgesIDList, func) {
+		var jsonObj = []; //declare object
+		badgesIDList.forEach(function(doc) { 
+			jsonObj.push([doc.badgeID]);
+		});
+		engine.view('badges', "allBadgesByID", {
+			"keys" : jsonObj
+		}, function(err, body) {
+			if (err){
+				sendResponse.sendErrorsDBError(res, err);
+			}
+			else if (body.rows[0] == null) {
+				func(null);
+			}
+			else{
+				func(badgesResponse(body));
+			}
+		});
+	}; 
+
+
 	// Private
 	badgeStringResponse = function(doc) {
 		var badge = {
@@ -161,6 +195,16 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 			"points" : doc.points
 		};
 		return JSON.stringify(badge);
+	}
+	badgeResponse = function(doc) {
+		var badge = {
+			"id" : doc._id,
+			"name" : doc.name,
+			"description" : doc.description,
+			"URLBadge" : doc.URLBadge,
+			"points" : doc.points
+		};
+		return badge;
 	}
 	badgesStringResponse = function(doc) {
 		var jsonObj = []; //declare object
@@ -177,6 +221,20 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 			"badges" : jsonObj
 		};
 		return JSON.stringify(badges);
+	}	
+	badgesResponse = function(doc) {
+		var jsonObj = []; //declare object
+		doc.rows.forEach(function(doc) { 
+			jsonObj.push({
+				"id" : doc.value._id,
+				"name" : doc.value.name,
+				"description" : doc.value.description,
+				"URLBadge" : doc.URLBadge,
+				"points" : doc.value.points
+			});
+		});
+		
+		return jsonObj;
 	}
 	badgeStorage = function(body, appid) {
 		var badge = {
@@ -196,7 +254,9 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		updateBadge : updateBadge,
 		deleteBadge : deleteBadge,
 		selectAllBadges : selectAllBadges,
-		checkExistBadge : checkExistBadge
+		checkExistBadge : checkExistBadge,
+		selectbadgeUtils: selectbadgeUtils,
+		selectbadgesUtils: selectbadgesUtils
 	}
 
 });

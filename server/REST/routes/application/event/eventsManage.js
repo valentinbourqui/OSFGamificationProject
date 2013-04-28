@@ -34,7 +34,6 @@ define(['../../../tools/engine',
 			});
 		});
 	};
-
 	//private
 	updateLevel = function(req,res,user,event){
 		user.points = user.points+event.value;
@@ -42,15 +41,20 @@ define(['../../../tools/engine',
 	};
 	
 	updateBadge = function(req,res,user,event){
-		
-		// TODO FINISH THIS PART 
-		
-		sendResponse.sendObjectCreated(res, "OK");
+		var isNewBadge = true;
+		var jsonObj = []; //declare object
+		user.badgesIDList.forEach(function(doc) { 
+			if(doc.badgeID == event.value){
+				isNewBadge =false;
+			}
+			jsonObj.push({
+				"badgeID" : doc.badgeID,
+			});
+		});
+		userManage.updateUserBadge(req,res,user,event.value,isNewBadge,jsonObj);
 	};
-	
 	
 	return {
 		notifyEvent : notifyEvent
 	}
-
 });

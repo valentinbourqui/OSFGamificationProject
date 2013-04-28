@@ -11,7 +11,7 @@ define(['../variables/cradleVariables'], function (cradleVariables) {
 		, cookies  = {} // store cookies, normally redis or something
 		;
 	
-			          
+			        
 		nano.db.create('osf_database', function(err, body) {
 			  if (!err) {
   				  console.log('database created.');
