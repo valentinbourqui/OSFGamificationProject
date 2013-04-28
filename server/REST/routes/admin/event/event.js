@@ -8,8 +8,16 @@ define(['../../../tools/engine'], function (engine) {
 					  emit([doc.appID,doc.type], doc);
 					}
 				}
+			
+		  , "allEventsByEventID": 
+		    	{  
+					map: function (doc) {
+					  emit([doc.appID,doc.type,doc.eventId], doc);
+					}
+				}
 			}
-		  , "shows": 
+		  ,
+		   "shows": 
 			{ "allByeventID": function(doc, req) 
 				{
        				return { body: JSON.stringify({ event : doc }) };

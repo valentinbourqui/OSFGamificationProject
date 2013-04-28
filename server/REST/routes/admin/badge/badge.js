@@ -8,9 +8,8 @@ define(['../../../tools/engine'], function (engine) {
 					  emit([doc.appID,doc.type], doc);
 					}
 				}
-			}
-		  ,"views": 
-		    { "allEventsBybadgeID": 
+			
+		  ,"allEventsBybadgeID": 
 		    	{  
 					map: function (doc,req) {
 					  emit([doc.appID,doc.type,doc.value], doc);

@@ -55,11 +55,11 @@ define(['./tools/app',
 	app.delete('/app/:appid/user/:id',appUser.deleteUser);
 	
 	// event call and manage
-	app.get('/app/:appid/user/userid/event',appEvent.notifyEvent);
+	app.post('/app/:appid/user/:userid/event',appEvent.notifyEvent);
 	
 	// leaderboard call and manage
-	app.get('/app/:appid/user/:id',appLeaderboard.selectLeaderboard);
-	app.get('/app/:appid/user/:id',appLeaderboard.selectUserLeaderboard);
+	app.get('/app/:appid/leaderboard',appLeaderboard.selectLeaderboard);
+	app.get('/app/:appid/user/:id/leaderboard',appLeaderboard.selectUserLeaderboard);
 	
 	return app;
 });

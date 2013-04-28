@@ -119,16 +119,23 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 
 	//utils 
 	
-	checkFirstLevelExist = function(req, res,appid, func) {
-		engine.view('levels', "selectFirstLevel", {
-				key : [appid,"level", 0]
+	checkLevel = function(req, res,appid,points, func) {
+		engine.view('levels', "allLevelsByAppID", {
+				key : [appid,"level"]
 			}, function(err, doc) {
 				if (err) {
 					sendResponse.sendErrorsDBError(res, err);
 				} else {
-					
-					if(doc.rows[0] != null){
-						func(doc.rows[0].value._id);
+					var IDLevel = null;
+					var newPoints = 0;
+					doc.rows.forEach(function(doc) { 
+						if(doc.value.points <= points && doc.value.points>=newPoints){
+							newPoints = doc.value.points;
+							IDLevel = doc.value._id;
+						}
+					});
+					if(IDLevel != null){
+						func(IDLevel);
 					}
 					else{
 						func(0);
@@ -199,7 +206,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		updateLevel : updateLevel,
 		deleteLevel : deleteLevel,
 		selectAllLevels : selectAllLevels,
-		checkFirstLevelExist: checkFirstLevelExist,
+		checkLevel: checkLevel,
 		selectLevelUtils:selectLevelUtils
 	}
 

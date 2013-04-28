@@ -15,6 +15,16 @@ define(['../../../tools/engine'], function (engine) {
        				return { body: JSON.stringify({ user : doc }) };
 				}
 			}
+		, "updates": 
+			{ "inplace": function(doc, req) 
+				{
+       				 var body = JSON.parse(req.body);
+          			 doc.points = body.points;
+          			 doc.badgesIDList = body.badgesIDList;
+          			 doc.levelID = body.levelID;
+          			 return [doc, JSON.stringify(doc)];
+				}
+			}
 		}, '_design/users'
 	);
 });

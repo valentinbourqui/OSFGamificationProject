@@ -157,7 +157,25 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 			sendResponse.sendErrorsBadContent(res, errors);
 		}
 	};
-
+	
+	//utils
+	checkExistEvents = function(req, res,eventId, func) {
+		engine.view('events', "allEventsByEventID", {
+				key : [req.params.appid,"event",eventId]
+			}, function(err, body) {
+			if (!err) {
+				var JSONContentEvent = body.rows[0];
+				if (JSONContentEvent == null) {
+					sendResponse.sendErrorsNotFound(res, "EventID not found");
+					return;
+				}
+				func(JSONContentEvent.value);
+			} else {
+				sendResponse.sendErrorsBadContent(res, "Error : Bad Content");
+			}
+		});
+	};
+	
 	// Private
 	eventStringResponse = function(doc) {
 		var event = {
@@ -205,7 +223,8 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		selectEvent : selectEvent,
 		updateEvent : updateEvent,
 		deleteEvent : deleteEvent,
-		selectAllEvents : selectAllEvents
+		selectAllEvents : selectAllEvents,
+		checkExistEvents:checkExistEvents
 	}
 
 });
