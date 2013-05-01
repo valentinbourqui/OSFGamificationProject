@@ -45,7 +45,6 @@ define(['../../../tools/engine',
 	// Select a user for a sepcified application
 	selectUser = function(req, res) {
 
-		// TODO ADD BADGES INFORMATIONS
 
 		gameEngine.checkExistGameEngine(req, res, function() {
 			engine.show('users', 'allByUserID', req.params.id, function(err, doc) {
@@ -93,7 +92,57 @@ define(['../../../tools/engine',
 	};
 
 	
-	// Utils 
+
+
+	// Utils
+	allUsersByAppID = function(req, res, func) {
+		engine.view('users', "allUsersByAppID", {
+			key : [req.params.appid, "user"]
+		}, function(err, doc) {
+			if (err) {
+				sendResponse.sendErrorsDBError(res, err);
+			} else {
+				doc.rows.sort(function(a, b) {
+					//return a.attributes.OBJECTID - B.attributes.OBJECTID;
+					if (a.value.points == b.value.points)
+						return 0;
+					if (a.value.points < b.value.points)
+						return +1;
+					if (a.value.points > b.value.points)
+						return -1;
+				});
+				var users = usersStringResponse(doc);
+				searchInformationsUser(users, users.length, function(usersFull) {
+					func(usersFull);
+				});
+			}
+		});
+	};
+
+	searchInformationsUser = function(users, number,func) {
+		number-=1;
+		if(number == -1){
+			func(users);		
+		}
+		else{
+			badgeManage.selectbadgesUtils(users[number].badgesIDList, function(badges) {
+						levelManage.selectLevelUtils(users[number].levelID, function(level) {
+							if (level == null && badges == null)
+								users[number]=userStringResponseUtils(users[number]);
+							else if(badges ==null)
+								users[number]= userStringResponseUtils(users[number], level);
+						    else if(level ==null)
+								 users[number]= userStringResponseBadgesUtils(users[number], badges);
+						    else
+								users[number]= userStringResponseUtils(users[number], level,badges);
+							searchInformationsUser(users,number,func);
+						});
+			});
+			
+		}
+
+	}
+	
 	checkExistUser = function(req, res, func) {
 		engine.show('users', 'allByUserID', req.params.userid, function(err, response) {
 			if (!err) {
@@ -155,8 +204,7 @@ define(['../../../tools/engine',
 							if (isNewBadge && (badge.points == null || badge.points <= user.points)) 
 								sendResponse.sendObjectCreated(res, userStringResponseBadge(doc.user, badge));
 							else
-						    	sendResponse.sendObjectCreated(res, userStringResponse(doc.user));
-								
+						    	sendResponse.sendObjectCreated(res, userStringResponse(doc.user));	
 						}
 					});
 				}
@@ -216,6 +264,51 @@ define(['../../../tools/engine',
 		}
 		return user;
 	}
+	usersStringResponse = function(doc) {
+		var jsonObj = []; //declare object
+		doc.rows.forEach(function(doc) { 
+			jsonObj.push({
+				"id" : doc.value._id,
+				"points" : doc.value.points,
+			    "levelID" : doc.value.levelID,
+				"badgesIDList" : doc.value.badgesIDList
+			});
+		});
+	
+		return jsonObj;
+	}
+		userStringResponseUtils = function(doc) {
+		var user = {
+			"id" : doc.id,
+			"points" : doc.points
+		};
+		return user;
+	}
+	userStringResponseUtils = function(doc,level) {
+		var user = {
+			"id" : doc.id,
+			"points" : doc.points,
+			"level": level
+		};
+		return user;
+	}
+	userStringResponseUtils = function(doc,level,badges) {
+		var user = {
+			"id" : doc.id,
+			"points" : doc.points,
+			"level": level,
+			"badges": badges
+		};
+		return user;
+	}
+	userStringResponseBadgesUtils = function(doc,badges) {
+		var user = {
+			"id" : doc.id,
+			"points" : doc.points,
+			"badges": badges
+		};
+		return user;
+	}
 
 	return {
 		createUser : createUser,
@@ -223,7 +316,9 @@ define(['../../../tools/engine',
 		deleteUser : deleteUser,
 		checkExistUser: checkExistUser,
 		updateUserLevel: updateUserLevel,
-		updateUserBadge:updateUserBadge
+		updateUserBadge: updateUserBadge,
+		allUsersByAppID: allUsersByAppID,
+		searchInformationsUser : searchInformationsUser
 	}
 
 });

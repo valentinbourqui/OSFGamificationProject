@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html style="min-height:99%;  border-top-color:#FFE4B5	; border-top-style:solid; border-top-width: 6px;border-left-color:#FFE4B5	; border-left-style:solid; border-left-width: 6px;border-right-color:#FFE4B5; border-right-style:solid; border-right-width: 6px;">
+<head>
+<meta charset=utf-8 />
+<link rel="stylesheet" type="text/css" href="style.css">
+<title>OSF Gamification Project Administrations</title>
+</head>
+<body  style="min-width:calc(100% - 20px); background-color: #DEB887; " >
+
+	<div class="divButton" style=" max-width: calc(100% - 15px); min-height:50px;background-color:#FFDEAD; ">
+		
+<center>
+<h1 style="colosr:#DEB887; font-family: Arial;">Script pour générer l'administration</h1>
+</center>
+</div>
+
+<div class="divButton" style=" max-width: calc(100% - 15px);min-width:900px; min-height:100px;background-color:#FFE4B5; ">
+	<div style=" float: left; margin-left: 300px;" >
+	<center><button type="button" name="GENERER" value="GENERER" onclick="createGameEngine()" class="css3button left" id="left">GENERER</button></center></div>
+		
+		<div  style="float:right; margin-right: 300px;" >	<center> <input type="ID Game Engine" name="fname" value="ID Game Engine" id="gameIDDel"><button type="button" name="EFFACER" value="EFFACER" onclick="deleteGameEngine()"  class="css3button right" id="right">EFFACER</button>
+	</center></div>
+</div>
+<div class="divButton" style=" max-width: calc(100% - 15px); min-height:400px; max-height:auto;background-color:#FFE4B5; padding-bottom: 30px;">
+<center><div style="width: 50%;min-width: 70%; font-family:arial; margin-top: 20px;text-align: left;border-color:#DEB887	; padding-left: 30px; border-style:solid; border-width: 6px;">
+	<p>Game Engine ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="gameEngineID">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="gameEngineName">-</span></p>
+	<br/>
+	<p>Level 1 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="levelID0">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="levelName0">-</span></p>
+	<p>Level 2 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="levelID1">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="levelName1">-</span></p>
+	<p>Level 3 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="levelID2">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="levelName2">-</span></p>
+	<p>Level 4 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="levelID3">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="levelName3">-</span></p>
+	<p>Level 5 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="levelID4">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="levelName4">-</span></p>
+	<p>Level 6 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="levelID5">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="levelName5">-</span></p>
+	<p>Level 7 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="levelID6">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="levelName6">-</span></p>
+	<br/>
+	<p>Badge 1 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeID0">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeName0">-</span></p>
+	<p>Badge 2 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeID1">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeName1">-</span></p>
+	<p>Badge 3 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeID2">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeName2">-</span></p>
+	<p>Badge 4 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeID3">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeName3">-</span></p>
+	<p>Badge 5 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeID4">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeName4">-</span></p>
+	<p>Badge 6 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeID5">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeName5">-</span></p>
+	<p>Badge 7 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeID6">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeName6">-</span></p>
+	<p>Badge 8 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeID7">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeName7">-</span></p>
+	<p>Badge 9 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeID8">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeName8">-</span></p>
+	<p>Badge 10 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeID9">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="badgeName9">-</span></p>
+	<br/>
+	<p>Event points 1 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="eventPtsID0">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="eventPtsName0">-</span></p>
+	<p>Event points 2 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="eventPtsID1">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="eventPtsName1">-</span></p>
+	<p>Event points 3 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="eventPtsID2">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="eventPtsName2">-</span></p>
+	<p>Event points 4 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="eventPtsID3">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="eventPtsName3">-</span></p>
+	<br/>
+	<p>Event badge 1 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="eventBgeID0">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="eventBgeName0">-</span></p>
+	<p>Event badge 2 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="eventBgeID1">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="eventBgeName1">-</span></p>
+	<p>Event badge 3 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="eventBgeID2">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="eventBgeName2">-</span></p>
+	<p>Event badge 4 ID :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="eventBgeID3">-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="eventBgeName3">-</span></p>
+
+	 </div></center>
+</div>
+
+</style>
+<!-- #####===== Scripts loaded @ the end: the page is loaded even if there is a problem =====#####-->
+  <script src="jquery-1.9.1.min.js"></script>
+  <script src="variables.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -137,25 +137,40 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 			}
 		});
 	};
-
+	selectGameEngineUtils = function(req, res,func) {
+		engine.show('gameEngines', 'allByGameEngineID', req.params.appid, function(err, doc) {
+			if (err) {
+				sendResponse.sendErrorsDBError(res, err);
+			} else {
+				if (doc.gameEngine == null) {
+					sendResponse.sendErrorsNotFound(res, "GameEngine not found");
+					return;
+				}
+				sendResponse.sendObject(res, gameEngineResponse(doc.gameEngine));
+			}
+		});
+	}
 	// Private
 	gameEngineResponse = function(doc) {
 		resObject = {
-			"app-id" : doc._id,
+			"id" : doc._id,
 			"name" : doc.name,
 			"description" : doc.description,
 			"APIKey" : doc.APIKey,
 			"secureKey" : doc.secureKey
 		};
 		return JSON.stringify(resObject);
-	}
-	
+	};
+
+
+
 	return {
 		createGameEngine : createGameEngine,
 		selectGameEngine : selectGameEngine,
 		deleteGameEngine : deleteGameEngine,
 		updateGameEngine : updateGameEngine,
-		checkExistGameEngine : checkExistGameEngine
+		checkExistGameEngine : checkExistGameEngine,
+		selectGameEngineUtils:selectGameEngineUtils
 	}
 
 });

@@ -12,7 +12,13 @@ define(function () {
 		res.header('Access-Control-Allow-Origin', "*");
 		res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,HEAD,DELETE,OPTIONS');
 		res.header('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');  // res.set('Access-Control-Allow-Max-Age', 3600);
-		next();
+		 // intercept OPTIONS method
+		if ('OPTIONS' == req.method) {
+			res.send(200);
+		}
+		else {
+			next();
+		}
 	}
     return {
         PORT : PORT,

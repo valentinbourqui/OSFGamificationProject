@@ -59,7 +59,6 @@ define(['./tools/app',
 	
 	// leaderboard call and manage
 	app.get('/app/:appid/leaderboard',appLeaderboard.selectLeaderboard);
-	app.get('/app/:appid/user/:id/leaderboard',appLeaderboard.selectUserLeaderboard);
 	
 	return app;
 });
