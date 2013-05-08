@@ -9,7 +9,7 @@
   
 </head>
 <body>
-	
+
 <!-- #####===== Nav bar =====#####-->
   <script type="text/x-handlebars">
     <div class=navbar>
@@ -18,11 +18,12 @@
         <ul class=nav>
           <li>{{#linkTo 'posts'}}Posts{{/linkTo}}</li>
           <li>{{#linkTo 'about'}}About{{/linkTo}}</li>
+          <li>{{#linkTo 'users'}}Profile{{/linkTo}}</li>
         </ul>
         <form class="navbar-form pull-right">
             <input class="span2" type="text" placeholder="Email">
 			<input class="span2" type="password" placeholder="Password">
-        	<button type="submit" class="btn">Sign in</button>
+         	<button type="submit" class="btn">Sign in</button>
         </form>
       </div>
     </div>
@@ -41,7 +42,7 @@
             </thead>
             {{#each model}}
             <tr><td>
-              {{#linkTo 'post' this}}{{title}} <small class="muted">by {{author}}</small>{{/linkTo}}
+              {{#linkTo 'post' this}}{{title}} <small class="muted">by {{author.name}}</small>{{/linkTo}}
             </td></tr>
             {{/each}}
           </table>
@@ -64,7 +65,7 @@
       <button {{action 'edit'}}>Edit</button>
     {{/if}}
     <h1>{{title}}</h1>
-    <h2>by {{author}} <small class="muted">({{date publishedAt}})</small></h2>
+    <h2>by {{author.name}} <small class="muted">({{date publishedAt}})</small></h2>
 
     <hr>
     <div class="intro">
@@ -86,12 +87,48 @@
   <script type="text/x-handlebars" id="about">
     <div class="about">
       <p>
-      	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris pharetra feugiat iaculis. Sed vulputate commodo sapien. 
-      	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vulputate ornare feugiat. Nunc dignissim, odio non congue 
-      	laoreet, elit dolor tempor lectus, sit amet venenatis urna neque sed purus. Sed ac urna at nulla varius gravida. 
-      	Vestibulum porta luctus malesuada. 
+       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris pharetra feugiat iaculis. Sed vulputate commodo sapien.
+       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vulputate ornare feugiat. Nunc dignissim, odio non congue
+       laoreet, elit dolor tempor lectus, sit amet venenatis urna neque sed purus. Sed ac urna at nulla varius gravida.
+       Vestibulum porta luctus malesuada.
       </p>
       <p>hola hola <a href="#">this is a link</a>!</p>
+    </div>
+  </script>
+  
+  <!-- #####===== Profile User page =====#####-->
+  <script type="text/x-handlebars" id="users">
+    <div class="users">
+      <div class="span6">
+          <table class="table">
+            <thead>
+              <tr><th>Users</th></tr>
+            </thead>
+            {{#each model}}
+            <tr><td>
+              {{#linkTo 'user' this}} <p>ID : {{name}} </p> {{/linkTo}}
+            </td></tr>
+            {{/each}}
+          </table>
+        </div>
+    </div>
+    <div class="span9">
+          {{outlet}}
+    </div>
+  </script>
+  
+  <script type="text/x-handlebars" id="user">
+    <div class="user">
+    	<div class="span 9">
+    		<h1>{{name}}</h1>
+		    <h2>id: {{id}} </h2>
+		
+		    <hr>
+		    <div class="intro">
+		      Youhou
+		    </div>
+		
+    	</div>
     </div>
   </script>
 
