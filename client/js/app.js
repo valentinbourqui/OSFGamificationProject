@@ -7,14 +7,19 @@ App.Store = DS.Store.extend({
   })
 });
 
+MyRestStore = DS.Store.extend({
+	revision: 12,
+	url: "http://127.0.0.10:3000/app/"
+});
+
 App.Router.map(function() {
+  this.resource('users', function() {
+  	this.resource('user', { path: ':user_id' })
+  });
   this.resource('posts', function() {
     this.resource('post', { path: ':post_id' })
   });
   this.resource('about');
-  this.resource('users', function() {
-  	this.resource('user', { path: ':user_id' })
-  });
 });
 
 // Redirige la page d'accueil vers "posts"
@@ -77,6 +82,16 @@ App.UsersRoute = Ember.Route.extend({
 
 App.User = DS.Model.extend({
 	name: DS.attr('string'),
-	posts: DS.hasMany('App.Post')
+	posts: DS.hasMany('App.Post')/*,
+	badges: DS.hasMany('App.Badge')*/
+});
+/*
+App.BadgesRoute = Ember.Route.extend({
+  model: function() {
+    return App.User.find();
+  },
 });
 
+App.Badge = DS.Model.Extend({
+	
+});*/

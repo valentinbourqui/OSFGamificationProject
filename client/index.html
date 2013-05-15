@@ -27,7 +27,6 @@
         </form>
       </div>
     </div>
-
     {{outlet}}
   </script>
 
@@ -40,9 +39,11 @@
             <thead>
               <tr><th>Recent posts</th></tr>
             </thead>
-            {{#each model}}
-            <tr><td>
-              {{#linkTo 'post' this}}{{title}} <small class="muted">by {{author.name}}</small>{{/linkTo}}
+            {{#each controller}}
+            <tr><td>	
+    		  {{#if author.isLoaded}}
+                {{#linkTo 'post' this}}{{title}} <small class="muted">by {{author.name}}</small>{{/linkTo}}
+              {{/if}}
             </td></tr>
             {{/each}}
           </table>
@@ -65,8 +66,9 @@
       <button {{action 'edit'}}>Edit</button>
     {{/if}}
     <h1>{{title}}</h1>
+    {{#if author.isLoaded}}
     <h2>by {{author.name}} <small class="muted">({{date publishedAt}})</small></h2>
-
+	{{/if}}
     <hr>
     <div class="intro">
       {{intro}}
@@ -104,9 +106,9 @@
             <thead>
               <tr><th>Users</th></tr>
             </thead>
-            {{#each model}}
+            {{#each controller}}
             <tr><td>
-              {{#linkTo 'user' this}} <p>ID : {{name}} </p> {{/linkTo}}
+              {{#linkTo 'user' this}} <p>{{name}} </p> {{/linkTo}}
             </td></tr>
             {{/each}}
           </table>
@@ -119,15 +121,15 @@
   
   <script type="text/x-handlebars" id="user">
     <div class="user">
-    	<div class="span 9">
+    	<div class="span 12">
     		<h1>{{name}}</h1>
 		    <h2>id: {{id}} </h2>
-		
 		    <hr>
-		    <div class="intro">
-		      Youhou
-		    </div>
-		
+		    <ul>
+			    {{#each posts}}
+	              <li> {{#linkTo 'posts'}} {{title}} <small class="muted"> ({{date publishedAt}}) </small> {{/linkTo}}</li>
+	            {{/each}}
+		    </ul>
     	</div>
     </div>
   </script>
