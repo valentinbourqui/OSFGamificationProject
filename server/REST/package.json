@@ -5,5 +5,12 @@
   "private": true,
   "dependencies": {
     "express": "3.x"
-  }
+  },
+  "devDependencies": {
+  	"api-easy": "0.2.x",
+  	"vows": "0.6.x"
+  },
+  "scripts": {
+     "test": "vows --spec test/api-1.js"
+   }
 }
