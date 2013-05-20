@@ -1,25 +1,38 @@
-App = Ember.Application.create({});
+App = Ember.Application.create({LOG_TRANSITIONS: true});
 
 App.Store = DS.Store.extend({
   revision: 12,
-  // adapter: 'DS.FixtureAdapter',
   adapter: DS.RESTAdapter.extend({
     url: 'data'
   })
 });
 
+MyRestStore = DS.Store.extend({
+	revision: 12,
+	url: "http://127.0.0.10:3000/app/"
+});
+
 App.Router.map(function() {
+  this.resource('users', function() {
+  	this.resource('user', { path: ':user_id' })
+  });
   this.resource('posts', function() {
     this.resource('post', { path: ':post_id' })
   });
   this.resource('about');
 });
 
+// Redirige la page d'accueil vers "posts"
 App.IndexRoute = Ember.Route.extend({
   redirect: function() {
     this.transitionTo('posts');
   }
 });
+
+
+/*
+ * Définition du modèle Post
+ */
 
 App.PostsRoute = Ember.Route.extend({
   model: function() {
@@ -41,7 +54,7 @@ App.PostController = Ember.ObjectController.extend({
 
 App.Post = DS.Model.extend({
   title: DS.attr('string'),
-  author: DS.attr('string'),
+  author: DS.belongsTo('App.User'),
   intro: DS.attr('string'),
   extended: DS.attr('string'),
   publishedAt: DS.attr('date'),
@@ -55,3 +68,30 @@ var showdown = new Showdown.converter();
 Ember.Handlebars.registerBoundHelper('md', function(input) {
   return new Ember.Handlebars.SafeString(showdown.makeHtml(input));
 });
+
+
+/*
+ * Définition du modèle User
+ */
+App.UsersRoute = Ember.Route.extend({
+  model: function() {
+    return App.User.find();
+  },
+});
+
+
+App.User = DS.Model.extend({
+	name: DS.attr('string'),
+	posts: DS.hasMany('App.Post')/*,
+	badges: DS.hasMany('App.Badge')*/
+});
+/*
+App.BadgesRoute = Ember.Route.extend({
+  model: function() {
+    return App.User.find();
+  },
+});
+
+App.Badge = DS.Model.Extend({
+	
+});*/
