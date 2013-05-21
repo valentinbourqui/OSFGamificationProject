@@ -18,12 +18,10 @@
         <ul class=nav>
           <li>{{#linkTo 'posts'}}Posts{{/linkTo}}</li>
           <li>{{#linkTo 'about'}}About{{/linkTo}}</li>
-          <li>{{#linkTo 'users'}}Profile{{/linkTo}}</li>
+          <li>{{#linkTo 'persons'}}Profile{{/linkTo}}</li>
         </ul>
         <form class="navbar-form pull-right">
-            <input class="span2" type="text" placeholder="Email">
-			<input class="span2" type="password" placeholder="Password">
-         	<button type="submit" class="btn">Sign in</button>
+         	<button {{action 'createUser'}}>Sign in</button>
         </form>
       </div>
     </div>
@@ -39,11 +37,9 @@
             <thead>
               <tr><th>Recent posts</th></tr>
             </thead>
-            {{#each controller}}
-            <tr><td>	
-    		  {{#if author.isLoaded}}
+            {{#each model}}
+            <tr><td>
                 {{#linkTo 'post' this}}{{title}} <small class="muted">by {{author.name}}</small>{{/linkTo}}
-              {{/if}}
             </td></tr>
             {{/each}}
           </table>
@@ -98,17 +94,17 @@
     </div>
   </script>
   
-  <!-- #####===== Profile User page =====#####-->
-  <script type="text/x-handlebars" id="users">
-    <div class="users">
+  <!-- #####===== Profile Person page =====#####-->
+  <script type="text/x-handlebars" id="persons">
+    <div class="persons">
       <div class="span6">
           <table class="table">
             <thead>
-              <tr><th>Users</th></tr>
+              <tr><th>Persons</th></tr>
             </thead>
-            {{#each controller}}
+            {{#each model}}
             <tr><td>
-              {{#linkTo 'user' this}} <p>{{name}} </p> {{/linkTo}}
+              {{#linkTo 'person' this}} <p>{{name}} </p> {{/linkTo}}
             </td></tr>
             {{/each}}
           </table>
@@ -119,8 +115,8 @@
     </div>
   </script>
   
-  <script type="text/x-handlebars" id="user">
-    <div class="user">
+  <script type="text/x-handlebars" id="person">
+    <div class="person">
     	<div class="span 12">
     		<h1>{{name}}</h1>
 		    <h2>id: {{id}} </h2>
