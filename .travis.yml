@@ -4,3 +4,4 @@ node_js:
 before_script:
   - chmod -R 777 server/REST
   - cd server/REST
+  - node runServer.js > run.log &
