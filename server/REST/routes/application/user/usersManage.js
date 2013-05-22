@@ -54,13 +54,13 @@ define(['../../../tools/engine',
 					badgeManage.selectbadgesUtils(doc.user.badgesIDList, function(badges) {
 						levelManage.selectLevelUtils(doc.user.levelID, function(level) {
 							if (level == null && badges == null)
-								sendResponse.sendObjectCreated(res, userStringResponse(doc.user));
+								sendResponse.sendObject(res, userStringResponse(doc.user));
 							else if(badges ==null)
-								sendResponse.sendObjectCreated(res, userStringResponse(doc.user, level));
+								sendResponse.sendObject(res, userStringResponse(doc.user, level));
 						    else if(level ==null)
-								sendResponse.sendObjectCreated(res, userStringResponseBadges(doc.user, badges));
+								sendResponse.sendObject(res, userStringResponseBadges(doc.user, badges));
 						    else
-								sendResponse.sendObjectCreated(res, userStringResponse(doc.user, level,badges));
+								sendResponse.sendObject(res, userStringResponse(doc.user, level,badges));
 						});
 					});
 				}
