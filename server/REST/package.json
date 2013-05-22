@@ -11,6 +11,6 @@
   	"vows": "0.6.x"
   },
   "scripts": {
-     "test": "sudo vows --spec test/api-1.js"
+     "test": "vows --spec test/api-1.js"
    }
 }
