@@ -21,7 +21,7 @@
           <li>{{#linkTo 'persons'}}Profile{{/linkTo}}</li>
         </ul>
         <form class="navbar-form pull-right">
-         	<button {{action 'createUser'}}>Sign in</button>
+          <button {{action 'createUser'}}>Sign in</button>
         </form>
       </div>
     </div>
@@ -117,16 +117,16 @@
   
   <script type="text/x-handlebars" id="person">
     <div class="person">
-    	<div class="span 12">
-    		<h1>{{name}}</h1>
-		    <h2>id: {{id}} </h2>
-		    <hr>
-		    <ul>
-			    {{#each posts}}
-	              <li> {{#linkTo 'posts'}} {{title}} <small class="muted"> ({{date publishedAt}}) </small> {{/linkTo}}</li>
-	            {{/each}}
-		    </ul>
-    	</div>
+     <div class="span 12">
+     	<h1>{{name}}</h1>
+		<h2>points: {{user.points}}</h2>
+		<hr>
+		<ul>
+			{{#each posts}}
+			<li> {{#linkTo 'posts'}} {{title}} <small class="muted"> ({{date publishedAt}}) </small> {{/linkTo}}</li>
+			{{/each}}
+		</ul>
+     </div>
     </div>
   </script>
 
