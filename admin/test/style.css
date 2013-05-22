@@ -1,0 +1,82 @@
+button.right {
+	margin-left:20px;
+}	
+button.left {
+	margin-right:20px;
+}
+button.css3button {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	color: #FFE4B5;
+	padding: 10px 23px;
+	background: -moz-linear-gradient(
+		top,
+		#c24f11 0%,
+		#cc8f60);
+	background: -webkit-gradient(
+		linear, left top, left bottom, 
+		from(#c24f11),
+		to(#cc8f60));
+	-moz-border-radius: 9px;
+	-webkit-border-radius: 9px;
+	border-radius: 9px;
+	border: 2px solid #deb887;
+	-moz-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 3px rgba(153,123,47,1);
+	-webkit-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 3px rgba(153,123,47,1);
+	box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 3px rgba(153,123,47,1);
+	text-shadow:
+		3px -1px 0px rgba(20,18,20,0),
+		0px 1px 0px rgba(59,59,59,1);
+	font-weight: bold;
+	margin-top:30px;
+	cursor: pointer;
+}
+#right:active {
+	box-shadow:
+		0px 0px 0px rgba(000,000,000,0.5),
+		inset 0px 0px 0px rgba(153,123,47,1);
+		-moz-box-shadow:
+		0px 0px 0px rgba(000,000,000,0.5),
+		inset 0px 0px 0px rgba(153,123,47,1);
+	-webkit-box-shadow:
+		0px 0px 0px rgba(000,000,000,0.5),
+		inset 0px 0px 0px rgba(153,123,47,1);
+		margin-top:32px;
+	}
+#left:active {
+	box-shadow:
+		0px 0px 0px rgba(000,000,000,0.5),
+		inset 0px 0px 0px rgba(153,123,47,1);
+		-moz-box-shadow:
+		0px 0px 0px rgba(000,000,000,0.5),
+		inset 0px 0px 0px rgba(153,123,47,1);
+	-webkit-box-shadow:
+		0px 0px 0px rgba(000,000,000,0.5),
+		inset 0px 0px 0px rgba(153,123,47,1);
+		margin-top:32px;
+	}
+	div.divButton{
+		margin-left:20px;
+		margin-right:20px;
+		margin-bottom:20px;
+			-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	border: 2px solid #deb887;
+	-moz-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 3px rgba(153,123,47,1);
+	-webkit-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 3px rgba(153,123,47,1);
+	box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 3px rgba(153,123,47,1);
+}
+
