@@ -80,6 +80,8 @@ Ember.Handlebars.registerBoundHelper('date', function(date) {
 	return moment(date).fromNow();
 });
 
+
+
 var showdown = new Showdown.converter();
 Ember.Handlebars.registerBoundHelper('md', function(input) {
 	return new Ember.Handlebars.SafeString(showdown.makeHtml(input));
@@ -131,7 +133,7 @@ App.User = DS.Model.extend({
 App.Badge = DS.Model.extend({
 	name : DS.attr('string'),
 	description : DS.attr('string'),
-	URLBadge : DS.attr('string'),
+	urlimg :  DS.attr('string'),
 	points : DS.attr('integer')
 });
 

@@ -198,7 +198,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 			"id" : doc._id,
 			"name" : doc.name,
 			"description" : doc.description,
-			"URLBadge" : doc.URLBadge,
+			"urlimg" : doc.URLBadge,
 			"points" : doc.points
 		};
 		return JSON.stringify(badge);
@@ -208,7 +208,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 			"id" : doc._id,
 			"name" : doc.name,
 			"description" : doc.description,
-			"URLBadge" : doc.URLBadge,
+			"urlimg" : doc.URLBadge,
 			"points" : doc.points
 		};
 		return badge;
@@ -222,7 +222,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 				"id" : doc.value._id,
 				"name" : doc.value.name,
 				"description" : doc.value.description,
-				"URLBadge" : doc.value.URLBadge,
+				"urlimg" : doc.value.URLBadge,
 				"points" : doc.value.points
 			});
 		});
@@ -240,7 +240,7 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 				"id" : doc.value._id,
 				"name" : doc.value.name,
 				"description" : doc.value.description,
-				"URLBadge" : doc.value.URLBadge,
+				"urlimg" : doc.value.URLBadge,
 				"points" : doc.value.points
 			});
 		});
