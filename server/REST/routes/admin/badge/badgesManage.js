@@ -165,32 +165,31 @@ define(['../../../tools/engine', '../../../tools/validatorContent', '../../../to
 		}; 
 
 	selectbadgesUtils = function(badgesIDList, func) {
-		if(typeof badgesIDList[0] == 'undefined' ){
-			func(null);
-		}
-		else{
-			
-			var jsonObj = []; //declare object
-			badgesIDList.forEach(function(doc) { 
-				jsonObj.push([doc.badgeID]);
-			});
-			engine.view('badges', "allBadgesByID", {
-				"keys" : jsonObj
-			}, function(err, body) {
-				if (err){
-					sendResponse.sendErrorsDBError(res, err);
-				}
-				else if (body.rows[0] == null) {
-						
-					func(null);
-				}
-				else{
-				
-					func(badgesResponse(body));
-				}
-			});
-		}
-	}; 
+    if(typeof badgesIDList == 'undefined' ){
+   func(null);
+  }
+  else{
+   var jsonObj = []; //declare object
+   badgesIDList.forEach(function(doc) { 
+    jsonObj.push([doc.badgeID]);
+   });
+   engine.view('badges', "allBadgesByID", {
+    "keys" : jsonObj
+   }, function(err, body) {
+    if (err){
+     sendResponse.sendErrorsDBError(res, err);
+    }
+    else if (body.rows[0] == null) {
+      
+     func(null);
+    }
+    else{
+     func(badgesResponse(body));
+    }
+   });
+  }
+ };
+
 
 
 	// Private
