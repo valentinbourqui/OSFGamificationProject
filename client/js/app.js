@@ -1,21 +1,24 @@
 App = Ember.Application.create();
 
-
 App.Store = DS.Store.extend({
-	revision: 12,
-	adapter: DS.RESTAdapter.extend({
-		url: 'data'
+	revision : 12,
+	adapter : DS.RESTAdapter.extend({
+		url : 'data'
 	})
 });
 
 DS.RESTAdapter.configure("plurals", {
-	user: "user"
+	user : "user"
+});
+DS.RESTAdapter.map('App.User', {
+  level: {embedded: 'true'},
+  badges: {embedded: 'true'}
 });
 
 App.Store.registerAdapter('App.User', DS.RESTAdapter.extend({
-	url: "http://127.0.0.10:3000/app/9a189ca7bb1f75f8f4ed62aedf086b6e",
-	mappings: {
-		user: App.User
+	url : "http://127.0.0.10:3000/app/8bd6a4fa8322f4d752435462a5000f1e",
+	mappings : {
+		user : App.User
 	}
 }));
 
@@ -37,11 +40,12 @@ App.Router.map(function() {
 // Redirige la page d'accueil vers "posts"
 App.IndexRoute = Ember.Route.extend({
 	redirect : function() {
-		this.transitionTo('persons'); //Charger les informations de "persons"
-		this.transitionTo('posts'); //Redirige la page vers posts
+		this.transitionTo('persons');
+		//Charger les informations de "persons"
+		this.transitionTo('posts');
+		//Redirige la page vers posts
 	}
 });
-
 
 /*****************************
  * Définition du modèle Post
@@ -91,63 +95,53 @@ App.PersonsRoute = Ember.Route.extend({
 });
 
 App.Person = DS.Model.extend({
-	name: DS.attr('string'),
-	posts: DS.hasMany('App.Post'),
-	user: DS.belongsTo('App.User')
+	name : DS.attr('string'),
+	posts : DS.hasMany('App.Post'),
+	user : DS.belongsTo('App.User')
 });
-
 
 /******************************
  * Définition du modèle User
  ******************************/
 App.UserRoute = Ember.Route.extend({
-	model : function() {
-		return App.User.find();
+	model : function(params) {
+		return App.User.find(params.user_id);
 	}
 });
 
- App.UserController = Ember.ObjectController.extend({
- 	isNotLogged: true,
-	 createUser: function() {
-	 	this.set('isNotLogged', false);
-	 },
- });
-
-App.User = DS.Model.extend({
-	points : DS.attr('integer'),
-	level: DS.hasMany('App.Level'),
-	badges: DS.hasMany('App.Badge')
+App.UserController = Ember.ObjectController.extend({
+	isNotLogged : true,
+	createUser : function() {
+		this.set('isNotLogged', false);
+	},
 });
 
+App.User = DS.Model.extend({
+	points : DS.attr('number'),
+    level : DS.belongsTo('App.Level'),
+    badges : DS.hasMany('App.Badge')
+	
+});
 
 /******************************
  * Définition du modèle Badge *
  ******************************/
- App.BadgesRoute = Ember.Route.extend({
-	 model: function(){
-	 	return App.Badge.find();
-	 }
- });
 
- App.Badge = DS.Model.extend({
-	 name: DS.attr('string'),
-	 description: DS.attr('string'),
-	 URLBadge: DS.attr('string'),
-	 points: DS.attr('integer')
- });
+
+App.Badge = DS.Model.extend({
+	name : DS.attr('string'),
+	description : DS.attr('string'),
+	URLBadge : DS.attr('string'),
+	points : DS.attr('integer')
+});
 
 /******************************
  * Définition du modèle Level *
  ******************************/
- App.LevelsRoute = Ember.Route.extend({
-	 model: function(){
-	 	return App.Level.find();
-	 }
- });
 
- App.Level = DS.Model.extend({
-	 name:  DS.attr('string'),
-	 description: DS.attr('string'),
-	 points:  DS.attr('string')
- });
- 
+
+App.Level = DS.Model.extend({
+	name : DS.attr('string'),
+	description : DS.attr('string'),
+	points : DS.attr('number')
+}); 

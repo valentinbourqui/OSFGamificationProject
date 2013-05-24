@@ -47,6 +47,7 @@ define(['./tools/app',
 	app.put('/admin/:appid/event/:id',adminEvents.updateEvent);
 	app.delete('/admin/:appid/event/:id',adminEvents.deleteEvent);
 	app.get('/admin/:appid/events',adminEvents.selectAllEvents);	
+	
 	// ############################################# DEFINE RESQUESTS FOR CLIENT SIDE #############################################
 		
     // user call and manage

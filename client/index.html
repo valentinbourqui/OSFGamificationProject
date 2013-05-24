@@ -119,7 +119,13 @@
     <div class="person">
      <div class="span 12">
      	<h1>{{name}}</h1>
-		<h2>points: {{user.points}}</h2>
+		<h2>points: {{user.points}} - level: {{user.level.name}} </h2>
+		<h1>Badges :</h1>
+		{{#if user.badges}}
+			{{#each user.badges}}
+			<p>{{name}} - {{description}}</p>
+			{{/each}}
+		{{/if}}
 		<hr>
 		<ul>
 			{{#each posts}}

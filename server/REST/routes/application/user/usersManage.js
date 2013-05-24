@@ -219,7 +219,7 @@ define(['../../../tools/engine',
 			"id" : doc._id,
 			"points" : doc.points
 		};
-		return JSON.stringify(user);
+		return JSON.stringify({"user": user});
 	}
 	userStringResponse = function(doc,level) {
 		var user = {
@@ -227,7 +227,7 @@ define(['../../../tools/engine',
 			"points" : doc.points,
 			"level": level
 		};
-		return JSON.stringify(user);
+		return JSON.stringify({"user": user});
 	}
 	userStringResponse = function(doc,level,badges) {
 		var user = {
@@ -236,7 +236,7 @@ define(['../../../tools/engine',
 			"level": level,
 			"badges": badges
 		};
-		return JSON.stringify(user);
+		return JSON.stringify({"user": user});
 	}
 	userStringResponseBadge = function(doc,badge) {
 		var user = {
@@ -244,7 +244,7 @@ define(['../../../tools/engine',
 			"points" : doc.points,
 			"badge": badge
 		};
-		return JSON.stringify(user);
+		return JSON.stringify({"user": user});
 	}
 	userStringResponseBadges = function(doc,badges) {
 		var user = {
@@ -252,7 +252,7 @@ define(['../../../tools/engine',
 			"points" : doc.points,
 			"badges": badges
 		};
-		return JSON.stringify(user);
+		return JSON.stringify({"user": user});
 	}
 	userStorage = function(appid,idLevel) {
 		var user = {
