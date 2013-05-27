@@ -11,6 +11,7 @@ before_script:
   - cd ~
   - cd ../..
   - ls
+  - chmod -R 777 var
   - cd var/lib/couchdb/
   - ls
   - curl -d @FILE.txt -H 'Content-type: application/json' -X POST localhost:5984/myapp_test/
