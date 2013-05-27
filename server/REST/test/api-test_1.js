@@ -198,9 +198,9 @@ suite.discuss('APP_side')
   .expect(200)
   .expect('should respond with infos about the user, the level and the badges[]', function(err, res, body){
 		var user = JSON.parse(body);
-		assert.isNotNull(user.id);
-		assert.isNotNull(user.level);
-		assert.isArray(user.badges);
+		assert.isNotNull(user.user.id);
+		assert.isNotNull(user.user.level);
+		assert.isNotNull(user.user.badges);
 	})
 .undiscuss()
 
