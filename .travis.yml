@@ -7,14 +7,9 @@ before_script:
   - chmod -R 777 server/REST
   - cd server/REST
   - node runServer.js > run.log &
-  - curl -X PUT localhost:5984/myapp_test
-  - cd ~
-  - cd ../..
+  - curl -X PUT http://127.0.0.1:5984/myapp_test
   - ls
-  - chmod -R 777 var
-  - cd var/lib/couchdb/
-  - ls
-  - curl -d @FILE.txt -H 'Content-type: application/json' -X POST localhost:5984/myapp_test/
+  - curl -d @FILE.txt -H "Content-type: application/json" -X POST http://127.0.0.1:5984/myapp_test/_bulk_docs
 after_script:
   - killall -9 node
 notification:
