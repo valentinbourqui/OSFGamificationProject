@@ -7,10 +7,12 @@ before_script:
   - chmod -R 777 server/REST
   - cd server/REST
   - node runServer.js > run.log &
-  - curl -X PUT localhost:5984/myapp_tes
-  - cd ../../../..
+  - curl -X PUT localhost:5984/myapp_test
+  - cd ../../../../..
   - ls
   - cd ~
+  - ls
+  - cd ..
   - ls
   - curl -d @FILE.txt -H 'Content-type: application/json' -X POST localhost:5984/myapp_test/
 after_script:
