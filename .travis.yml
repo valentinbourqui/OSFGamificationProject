@@ -8,6 +8,7 @@ before_script:
   - cd server/REST
   - node runServer.js > run.log &
   - curl -X PUT localhost:5984/myapp_test
+  - find -name "*.couch"
   - cd ~
   - cd ../..
   - ls
