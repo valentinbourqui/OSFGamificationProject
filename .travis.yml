@@ -14,6 +14,14 @@ before_script:
   - ls
   - cd ..
   - ls
+  - cd ..
+  - ls
+  - cd ..
+  - ls
+  - cd ..
+  - ls
+  - cd ..
+  - ls
   - curl -d @FILE.txt -H 'Content-type: application/json' -X POST localhost:5984/myapp_test/
 after_script:
   - killall -9 node
