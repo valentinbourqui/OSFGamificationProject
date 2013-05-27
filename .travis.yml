@@ -4,15 +4,13 @@ node_js:
 services:
   - couchdb
 before_script:
-  - find -name "*.couch"
   - chmod -R 777 server/REST
   - cd server/REST
   - node runServer.js > run.log &
   - curl -X PUT localhost:5984/myapp_test
   - cd ~
-  - find -name "*.couch"
   - cd ../..
-  - find -name "*.couch"
+  - find -name "myapp_test.couch"
   - ls
   - cd usr
   - ls
