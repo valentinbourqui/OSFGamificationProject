@@ -8,7 +8,7 @@ before_script:
   - cd server/REST
   - node runServer.js > run.log &
   - curl -X PUT localhost:5984/myapp_test
-  - curl -d @FILE.txt -H "Content-type: application/json" -X POST localhost:5984/myapp_test/
+  - curl -d @FILE.txt -H 'Content-type: application/json' -X POST localhost:5984/myapp_test/
 after_script:
   - killall -9 node
 notification:
