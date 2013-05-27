@@ -3,14 +3,16 @@ node_js:
   - 0.8
 services:
   - couchdb
+notification:
+email: false
 before_script:
   - chmod -R 777 server/REST
   - cd server/REST
   - node runServer.js > run.log &
   - curl -X PUT localhost:5984/myapp_test
   - curl -X GET localhost:5984/_all_dbs
+  -ls
+  - head FILE.txt
   - curl -d @FILE.txt -H "Content-type: application/json" -X POST http://127.0.0.1:5984/myapp_test/_bulk_docs
 after_script:
   - killall -9 node
-notification:
-email: false
