@@ -1,4 +1,4 @@
-{"total_rows":199,"offset":0,"rows":[
+{"docs":[
 {"id":"00692e248b1fde106ec3c499d00000eb","key":"00692e248b1fde106ec3c499d00000eb","value":{"rev":"1-2552ca5df5f061b8062dd36422466c28"},"doc":{"_id":"00692e248b1fde106ec3c499d00000eb","_rev":"1-2552ca5df5f061b8062dd36422466c28","type":"gameEngine","name":"MyNewGameEngine","description":"this is a test game engine","APIKey":"","secureKey":""}},
 {"id":"00692e248b1fde106ec3c499d00019c0","key":"00692e248b1fde106ec3c499d00019c0","value":{"rev":"1-d721e9cdb6efba52fcd961fa645858d0"},"doc":{"_id":"00692e248b1fde106ec3c499d00019c0","_rev":"1-d721e9cdb6efba52fcd961fa645858d0","appID":"ba66c9d2c459cabad838032a86013d5f","type":"badge","name":"badge_01","description":"My first badge","URLBadge":"www.test.com/lala.png"}},
 {"id":"00692e248b1fde106ec3c499d0004726","key":"00692e248b1fde106ec3c499d0004726","value":{"rev":"1-c3ff7d380bc1ad9efc32727e8190e03f"},"doc":{"_id":"00692e248b1fde106ec3c499d0004726","_rev":"1-c3ff7d380bc1ad9efc32727e8190e03f","appID":"ba66c9d2c459cabad838032a86013d5f","type":"level","name":"level_01","description":"Level Description","points":"20"}},
