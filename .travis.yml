@@ -10,7 +10,7 @@ before_script:
   - curl -X PUT localhost:5984/myapp_test
   - cd ~
   - cd ../..
-  - find -name "myapp_test.couch"
+  - chmod -R 777 var/lib/couchdb
   - ls
   - cd usr
   - ls
