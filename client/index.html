@@ -21,7 +21,15 @@
           <li>{{#linkTo 'persons'}}Profile{{/linkTo}}</li>
         </ul>
         <form class="navbar-form pull-right">
-          <button {{action 'createUser'}}>Sign in</button>
+        {{#if App.loginController.isAuthenticated}}
+        	<button {{action "logOut" target="App.loginController"}}>Login</button>
+  		{{else}}
+  			{{view Ember.TextField valueBinding="App.loginController.userName"}}
+			{{#if App.loginController.isError}}
+				<span class="login-error">Error: Invalid userName.</span>
+			{{/if}}
+	  		<button {{action "authenticate" target="App.loginController"}}>Login</button>
+        {{/if}}
         </form>
       </div>
     </div>
@@ -40,8 +48,8 @@
             {{#each model}}
             <tr><td>
                 {{#linkTo 'post' this}}{{title}} <small class="muted">by {{author.name}}</small>{{/linkTo}}
-            </td></tr>
             {{/each}}
+    		</td></tr>
           </table>
         </div>
         <div class="span9">
@@ -49,11 +57,23 @@
         </div>
     </div>
   </script>
+  
+  <script type="text/x-handlebars" id="post/_createPost">
+	    <p>{{view Ember.TextField valueBinding='title'}}</p>
+	    <p>{{view Ember.TextArea valueBinding='intro'}}</p>
+	    <p>{{view Ember.TextArea valueBinding='extended'}}</p>
+  </script>
 
   <script type="text/x-handlebars" id="posts/index">
     <p class="text-warning">Please select a post</p>
+	{{#if App.NewPostController.isPosting}}	
+		<button {{action 'donePosting' target = "App.NewPostController"}}>Post</button>
+		{{partial 'post/createPost'}}
+	{{else}}
+		<button {{action 'createPost' target = "App.NewPostController"}}>New Post</button>
+	{{/if}}
   </script>
-
+  
   <script type="text/x-handlebars" id="post">
     {{#if isEditing}}
       {{partial 'post/edit'}}
@@ -118,14 +138,12 @@
   <script type="text/x-handlebars" id="person">
     <div class="person">
      <div class="span 12">
-     	<h1>{{name}}</h1>
-		<h2>points: {{user.points}} - level: {{user.level.name}} </h2>
-		<h1>Badges :</h1>
+     	<h1>{{name}} </h1>
+		<h2>points: {{user.points}} - {{user.level.name}} </h2>
 		{{#if user.badges}}
 			{{#each user.badges}}
-			<p>{{name}} - {{description}} - 
-			
-     			<img src="{{unbound urlimg}}" alt="badge1" height="20" width="20"/>
+			<p>
+     			{{#linkTo 'badge' this}} <img src="{{unbound urlimg}}" alt="badge1" height="20" width="20"/> {{/linkTo}}
 			</p> 
 			{{/each}}
 		{{/if}}
@@ -137,6 +155,16 @@
 		</ul>
      </div>
     </div>
+  </script>
+  
+  <script type="text/x-handlebars" id = "badge">
+  	<div class="badge">
+  		<div class = "span 9">
+  			<h1> Badge : {{name}} <img src= {{bindAttr src="urlimg"}} alt="badge1" </h1>
+  			<h3> Points nécessaires : {{points}} </h3>
+  			<p> Description : {{description}} </p>
+  		</div>
+  	</div>
   </script>
 
 <!-- #####===== Scripts loaded @ the end: the page is loaded even if there is a problem =====#####-->
