@@ -11,7 +11,7 @@ before_script:
   - curl -X GET localhost:5984/_all_dbs
   - ls
   - head FILE.txt
-  - curl -d '{"docs":[{"id":"00692e248b1fde106ec3c499d00000eb","key":"00692e248b1fde106ec3c499d00000eb","value":{"rev":"1-2552ca5df5f061b8062dd36422466c28"},"doc":{"_id":"00692e248b1fde106ec3c499d00000eb","_rev":"1-2552ca5df5f061b8062dd36422466c28","type":"gameEngine","name":"MyNewGameEngine","description":"this is a test game engine","APIKey":"","secureKey":""}}]}' -X POST http://127.0.0.1:5984/myapp_test/_bulk_docs
+  - curl -H "Content-type: application/json" -d '{"docs":[{"id":"00692e248b1fde106ec3c499d00000eb","key":"00692e248b1fde106ec3c499d00000eb","value":{"rev":"1-2552ca5df5f061b8062dd36422466c28"},"doc":{"_id":"00692e248b1fde106ec3c499d00000eb","_rev":"1-2552ca5df5f061b8062dd36422466c28","type":"gameEngine","name":"MyNewGameEngine","description":"this is a test game engine","APIKey":"","secureKey":""}}]}' -X POST http://127.0.0.1:5984/myapp_test/_bulk_docs
 after_script:
   - killall -9 node
 notification:
