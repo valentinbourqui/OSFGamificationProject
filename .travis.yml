@@ -12,7 +12,7 @@ before_script:
   - ls
   - head FILE.txt
   - curl -X GET http://127.0.0.1:5984/myapp_test/_all_docs?include_docs=true
-  - curl -H \"Content-type: application/json\" -d {} -X POST http://127.0.0.1:5984/myapp_test/
+  - curl -H "Content-type: application/json" -d {} -X POST http://127.0.0.1:5984/myapp_test/
   - curl -X GET http://127.0.0.1:5984/myapp_test/_all_docs?include_docs=true
 after_script:
   - killall -9 node
