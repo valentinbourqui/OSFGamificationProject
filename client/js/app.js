@@ -1,10 +1,8 @@
 App = Ember.Application.create();
 
 App.Store = DS.Store.extend({
-	revision : 12,
-	adapter : DS.RESTAdapter.extend({
-		url : 'data'
-	})
+ revision: 12,
+	adapter : DS.ElasticSearchAdapter.create({url: 'http://localhost:9200'})
 });
 
 DS.RESTAdapter.configure("plurals", {
@@ -13,11 +11,11 @@ DS.RESTAdapter.configure("plurals", {
 DS.RESTAdapter.map('App.User', {
   level: {embedded: 'true'},
   badges: {embedded: 'true'},
-  user: {embedded: 'load'},  
+  user: {embedded: 'load'}, 
 });
 
 App.Store.registerAdapter('App.User', DS.RESTAdapter.extend({
-	url : "http://127.0.0.10:3000/app/e871eaf3f76cfca29ca8e2d94d0008a6",
+	url : "http://127.0.0.10:3000/app/59786afa85b1c5b7257db51b7b08f0fa",
 	mappings : {
 		user : App.User
 	}
@@ -32,10 +30,11 @@ App.Router.map(function() {
 	this.resource('posts', function() {
 		this.resource('post', {
 			path : ':post_id'
-		})
+		}),
+		this.route('index')
 	});
 	this.resource('about');
-
+    this.resource("badge");
 });
 
 // Redirige la page d'accueil vers "posts"
@@ -48,52 +47,114 @@ App.IndexRoute = Ember.Route.extend({
 	}
 });
 
+
 /*****************************
  * Définition du modèle Post
  ******************************/
 
-App.PostsRoute = Ember.Route.extend({
-	model : function() {
-		return App.Post.find();
-	}
-});
-
-App.NewPostController = Ember.Object.create({
-
-	isPosting: false,
-	createPost: function() {
-		this.set('isPosting', true);
-	},
-	donePosting: function(){
-		this.set('isPosting', false);
-		post = App.Post.createRecord({});
-		// Envoyer event à l'utilisateur loggé
-	}
-});
-
-App.PersonCreateView = Ember.View.extend({ templateName: 'person_create' });
-
-App.PostController = Ember.ObjectController.extend({
-	isEditing: false,
-	doneEditing: function() {
-		this.set('isEditing', false);
-		//this.get('store').commit();
-	},
-	edit: function() {
-		this.set('isEditing', true);
-	},
-});
 
 App.Post = DS.Model.extend({
 	title : DS.attr('string'),
 	author : DS.belongsTo('App.Person'),
 	intro : DS.attr('string'),
 	extended : DS.attr('string'),
-	publishedAt : DS.attr('date')
+	publishedat : DS.attr('date')
 });
 
+
+App.PostsRoute = Ember.Route.extend({
+	model : function() {
+		return App.Post.find();
+	},
+});
+
+
+App.PostsController = Ember.ObjectController.extend({
+	isEditing : false,
+  removeTask: function(post) {
+    if ( confirm("Delete this task?") ) {
+        post.deleteRecord();
+        post.store.commit();
+        var per = App.Person.find("11");
+	    var url =  "http://127.0.0.10:3000/app/59786afa85b1c5b7257db51b7b08f0fa/user/"+per.get("user").get("id")+"/event";
+	        $.post(url, { eventId: "TenComment"}).done(function(data) {
+	        	 $.post(url, { eventId: "badge3"}).done(); 
+		}); 
+		
+    }
+  },
+	loadedData : function() {
+		App.Post.find();
+	    App.Person.find();
+	},
+	
+	createPost: function() {
+	    
+  var post,
+      _this = this;
+    post = App.Post.createRecord({});
+    post.one('didCreate', function() {
+      return Ember.run.next(_this, function() {
+        return this.transitionTo("edit", post);
+      });
+    });
+  //  return post.get("store").commit();
+	   
+   }
+});
+App.PostsIndexController = Ember.ObjectController.extend({
+	doneEditing : function() {
+		var ladate=new Date();
+	     post = App.Post.createRecord({});
+	    var per = App.Person.find("11");
+	    var url =  "http://127.0.0.10:3000/app/59786afa85b1c5b7257db51b7b08f0fa/user/"+per.get("user").get("id")+"/event";
+	        $.post(url, { eventId: "TenComment"}).done(function(data) {
+	        	 $.post(url, { eventId: "badge1"}).done(); 
+		}); 
+		       
+				post.set('publishedat', ""+ladate.getFullYear()+"-"+ladate.getDate()+"-"+(ladate.getMonth()+1));
+		        post.set("title",this.get("title"));
+		        post.set("intro",this.get("intro"));
+		        post.set("extended",this.get("extended"));
+		    //    post.set("author",per);
+				this.set("title","");
+				this.set("intro","");
+				this.set("extended","");
+				post.get("store").commit();	
+	},
+	title : "",
+	intro : "",
+	extended : "",
+});
+App.PostController = Ember.ObjectController.extend({
+	isEditing : false,
+	doneEditing : function() {
+	    var per = App.Person.find("11");
+	    var url =  "http://127.0.0.10:3000/app/59786afa85b1c5b7257db51b7b08f0fa/user/"+per.get("user").get("id")+"/event";
+	        $.post(url, { eventId: "TenComment"}).done(function(data) {
+	        	 $.post(url, { eventId: "badge2"}).done(); 
+		}); 
+		var ladate=new Date();
+		this.set('isEditing', false);
+		this.set('publishedat', ""+ladate.getFullYear()+"-"+ladate.getDate()+"-"+(ladate.getMonth()+1));
+		this.get('store').commit();
+	},
+	edit : function() {
+		
+		this.set('isEditing', true);
+	}
+});
+App.Post.reopenClass({
+  url: 'osf/posts'
+});
+
+
+
 Ember.Handlebars.registerBoundHelper('date', function(date) {
-	return moment(date).fromNow();
+	if(date != null)
+		return moment(date).fromNow();
+		else
+		return "";
 });
 
 
@@ -106,20 +167,36 @@ Ember.Handlebars.registerBoundHelper('md', function(input) {
 /*******************************
  * Définition du modèle Person *
  *******************************/
+
 App.PersonsRoute = Ember.Route.extend({
-	model : function() {
-		return App.Person.find();
-	},
-	loggedUser: function(){
-		return App.Person.find({ name: App.loginController.userName });
-	}
+model : function() {
+	//this.reload();
+return App.Person.find();
+}
 });
 
 
 App.Person = DS.Model.extend({
-	name: DS.attr('string'),
-	posts: DS.hasMany('App.Post'),
-	user: DS.belongsTo('App.User')
+	name : DS.attr('string'),
+	posts : DS.hasMany('App.Post'),
+	user : DS.belongsTo('App.User'),
+
+});
+
+
+App.Person.reopenClass({
+  url: 'osf/persons'
+});
+
+App.PersonController = Ember.ObjectController.extend({
+	isNotLogged : true,
+	setupController : function(){
+		controller.set("content", App.Person.findAll());
+		this.set('isNotLogged', false);
+	},
+
+    
+
 });
 
 
@@ -127,17 +204,25 @@ App.Person = DS.Model.extend({
  * Définition du modèle User
  ******************************/
 App.UserRoute = Ember.Route.extend({
-	model : function(params) {
-		return App.User.find(params.user_id);
-	}
+	model : function() {
+		return App.User.find();
+	},
+	model : function(id) {
+		return App.User.find(id);
+	},
+	setupController: function(controller, user) {
+   		 controller.set('model', user);
+    }
 });
 
 App.UserController = Ember.ObjectController.extend({
-	isNotLogged : true,
-	createUser : function() {
-		this.set('isNotLogged', false);
-	},
+	 setupController : function(controller){
+        controller.set("content", App.User.findAll());
+    }
 });
+
+
+
 
 App.User = DS.Model.extend({
 	points : DS.attr('number'),
@@ -145,8 +230,9 @@ App.User = DS.Model.extend({
     badges : DS.hasMany('App.Badge')
 	
 });
-
-
+App.User.reopenClass({
+  url: 'user'
+});
 /******************************
  * Définition du modèle Badge *
  ******************************/
@@ -163,37 +249,48 @@ App.Badge = DS.Model.extend({
  * Définition du modèle Level *
  ******************************/
 
+
 App.Level = DS.Model.extend({
 	name : DS.attr('string'),
 	description : DS.attr('string'),
 	points : DS.attr('number')
 }); 
 
-/******************************
- * Définition du modèle Event *
- ******************************/
 
-App.LOGGEDUSER ;
+App.PersonCreateView = Ember.View.extend({ templateName: 'person_create' }); 
+
+/******************************
++ * Définition du modèle Event *
++ ******************************/
+
+App.LOGGEDUSER = null ;
 
 App.loginController = Ember.Object.create({
-  	userName: '',
-  	isError: false,
-  	isAuthenticated: false,
-  	
-	authenticate: function() {
-		App.LOGGEDUSER = App.Person.loggedUser();
-		var idLoggedUser = App.LOGGEDUSER.get('user_id');
-	    // Normally this would go to the server. Simulate that.
-	    if(App.LOGGEDUSER.get('name') === this.get('userName')) {
-	      this.set('isError', false);
-	      this.set('username', '');
-	      this.set('isAuthenticated', true);
-	    } else {
-	      this.set('isError', true);
-	    }
+    userName: '',
+    isError: false,
+    isAuthenticated: false,
+    
+  authenticate: function() {
+   
+
+	var url =  "http://localhost:9200/osf/persons/_search?q=name:"+App.loginController.userName+"&pretty=true";
+	  $.get(url).done(function(data) {
+	  
+	  	 App.LOGGEDUSER = data.hits.total;
+	  	     // Normally this would go to the server. Simulate that.
+	      if(App.LOGGEDUSER> 0) {
+	        App.loginController.set('isError', false);
+	        App.loginController.set('username', '');
+	        App.loginController.set('isAuthenticated', true);
+	      } else {
+	        App.loginController.set('isError', true);
+	         App.loginController.set('username', '');
+	      }
+		}); 
   },
   
   logOut: function(){
-  	this.set('isAuthenticated', false);
+    this.set('isAuthenticated', false);
+     this.set('username', '');
   },
-});
+}); 

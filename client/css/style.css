@@ -7,3 +7,49 @@ html, body {
     font-weight: bold;
     color: black;
 }
+.pull-right{
+	padding-top: 6px;
+}
+td .remove-task {
+  top: 0.2em;
+  left:0.2em;
+  display: inline-block;
+  position: relative;
+  visibility: hidden;
+  opacity: 0.45;
+}
+
+td:hover .remove-task {
+  visibility: visible;
+}
+
+td .remove-task:hover {
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+/* Lifted from Twitter bootstrap */
+[class^="icon-"], [class*=" icon-"] {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
+  vertical-align: text-top;
+  background-image: url("https://raw.github.com/twitter/bootstrap/master/img/glyphicons-halflings.png");
+  background-position: 14px 14px;
+  background-repeat: no-repeat;
+  *margin-right: .3em;
+}
+[class^="icon-"]:last-child, [class*=" icon-"]:last-child {
+  *margin-left: 0;
+}
+
+.icon-ok {
+  background-position: -288px 0;
+}
+.icon-remove {
+  background-position: -312px 0;
+}
+.icon-exclamation-sign {
+  background-position: 0 -120px;
+}

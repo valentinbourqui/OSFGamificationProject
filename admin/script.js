@@ -146,24 +146,24 @@ function createEventbadge(gameID, i, badgeID) {
 	var eventbadge;
 	if (i == 0) {
 		eventbadge = JSON.stringify({
-			'name' : 'badge nerd',
-			'description' : 'Event badge',
+			'name' : 'badge post',
+			'description' : 'Frist post',
 			'eventId' : 'badge1',
 			'eventType' : 'badge',
 			'value' : badgeID
 		});
 	} else if (i == 1) {
 		eventbadge = JSON.stringify({
-			'name' : 'badge user',
-			'description' : 'Event badge',
+			'name' : 'badge edit',
+			'description' : 'First edit post',
 			"eventId" : 'badge2',
 			'eventType' : 'badge',
 			'value' : badgeID
 		});
 	} else if (i == 2) {
 		eventbadge = JSON.stringify({
-			'name' : 'badge mid',
-			'description' : 'Event badge',
+			'name' : 'badge delete',
+			'description' : 'First delete post',
 			'eventId' : 'badge3',
 			'eventType' : 'badge',
 			'value' : badgeID
