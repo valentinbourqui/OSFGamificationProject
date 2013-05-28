@@ -1,6 +1,6 @@
 OSFGamificationProject
 ======================
-The Gamification Project, Master of Science in Engineering (MSE), HES-SO
+The Gamification Project, Master of Science in Engineering (MSE), HES-SO University of Applied Sciences and Arts Western Switzerland
 
 
 Travis build status:
