@@ -10,16 +10,16 @@ level[5] =JSON.stringify({'name':'Level master','description':'Levels','points':
 level[6] =JSON.stringify({'name':'Level king','description':'Levels','points':100});
 
 var badge = new Array();
-badge[0] =JSON.stringify({'name':'badge nerd','description':'badges','points':0,"URLBadge": "http://www.4squarebadges.com/Portals/35599/images/foursquare-wino-badge.jpg.png"});
-badge[1] =JSON.stringify({'name':'badge user','description':'badges','points':0,"URLBadge": "http://www.4squarebadges.com/Portals/35599/images/foursquare-wino-badge.jpg.png"});
-badge[2] =JSON.stringify({'name':'badge c','description':'badges','points':0,"URLBadge":  "http://www.4squarebadges.com/Portals/35599/images/foursquare-wino-badge.jpg.png"});
+badge[0] =JSON.stringify({'name':'badge first post','description':'badges','points':0,"URLBadge": "http://www.4squarebadges.com/Portals/35599/images/foursquare-wino-badge.jpg.png"});
+badge[1] =JSON.stringify({'name':'badge first edit post','description':'badges','points':0,"URLBadge": "http://www.4squarebadges.com/Portals/35599/images/foursquare-wino-badge.jpg.png"});
+badge[2] =JSON.stringify({'name':'badge first delete','description':'badges','points':0,"URLBadge":  "http://www.4squarebadges.com/Portals/35599/images/foursquare-wino-badge.jpg.png"});
 badge[3] =JSON.stringify({'name':'badge dev','description':'badges','points':0,"URLBadge": "http://www.4squarebadges.com/Portals/35599/images/foursquare-wino-badge.jpg.png"});
 badge[4] =JSON.stringify({'name':'badge geek','description':'badges','points':0,"URLBadge":  "http://www.4squarebadges.com/Portals/35599/images/foursquare-wino-badge.jpg.png"});
 badge[5] =JSON.stringify({'name':'badge master','description':'badges','points':0,"URLBadge":  "http://www.4squarebadges.com/Portals/35599/images/foursquare-wino-badge.jpg.png"});
 badge[6] =JSON.stringify({'name':'badge king','description':'badges','points':0,"URLBadge":  "http://www.4squarebadges.com/Portals/35599/images/foursquare-wino-badge.jpg.png"});
 badge[7] =JSON.stringify({'name':'badge first post','description':'badges','points':0,"URLBadge":  "http://www.4squarebadges.com/Portals/35599/images/foursquare-wino-badge.jpg.png"});
-badge[8] =JSON.stringify({'name':'badge first comment','description':'badges','points':0,"URLBadge":  "http://www.4squarebadges.com/Portals/35599/images/foursquare-wino-badge.jpg.png"});
-badge[9] =JSON.stringify({'name':'badge comment master','description':'badges','points':30,"URLBadge":  "http://www.4squarebadges.com/Portals/35599/images/foursquare-wino-badge.jpg.png"});
+badge[8] =JSON.stringify({'name':'badge first edit post','description':'badges','points':0,"URLBadge":  "http://www.4squarebadges.com/Portals/35599/images/foursquare-wino-badge.jpg.png"});
+badge[9] =JSON.stringify({'name':'badge first delete','description':'badges','points':0,"URLBadge":  "http://www.4squarebadges.com/Portals/35599/images/foursquare-wino-badge.jpg.png"});
 
 var eventPoints = new Array();
 
