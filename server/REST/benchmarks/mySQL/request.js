@@ -96,7 +96,7 @@ define(['mysql'], function(mysql) {
 		});
 	}
 	selectUsersByAppid = function(app_id, id, callback) {
-		connection.query('SELECT * FROM user WHERE id=' + id + ' and app_id=' + app_id + ';', function(err, rows, fields) {
+		connection.query('SELECT * FROM user WHERE id=' + id + ' and app_id=' + (app_id+10) + ';', function(err, rows, fields) {
 			callback();
 		});
 	}
@@ -126,8 +126,36 @@ define(['mysql'], function(mysql) {
 	getName = function() {
 		return "mySQL";
 	}
+	deleteUsers = function(callback){
+		connection.query("DELETE FROM user", function(err, rows, fields) {
+			if (err) {
+				console.log(id);
+				console.log(err);
+			}
+			callback();
+		});
+	}
+	insertUsers = function(iter,app_id,callback) {
+		var string = 'INSERT INTO user (id, app_id) VALUES ';
+		for (var id = 0; id < iter; id++) {
+			string += '(' + id + ', ' + app_id + ')';
+			if(id==iter-1)
+				string+=';';
+			else
+				string+=',';
+		}
+		connection.query(string, function(err, rows, fields) {
+			if (err) {
+				console.log(id);
+				console.log(err);
+			}
+			callback();
+		});
+	}
 
 	return {
+		deleteUsers : deleteUsers,
+		insertUsers : insertUsers,
 		selectUsersByAppid : selectUsersByAppid,
 		getName : getName,
 		begin : begin,
