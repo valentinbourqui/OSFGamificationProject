@@ -12,3 +12,5 @@ https://github.com/falkin/OSFGamificationProject/wiki/Run-the-project-and-instal
 
 To see the documentation of the REST API, please refer to the wiki:  
 https://github.com/falkin/OSFGamificationProject/wiki/API-REST%20%20V1.0%20Alpha
+
+hello
